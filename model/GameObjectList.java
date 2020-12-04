@@ -54,4 +54,9 @@ public class GameObjectList {
 				return o.getPositionToString(i, j);
 		return "";
 	}
+	public void pushVampires() {
+		for(IAttack o: gameObjects) {
+			o.receiveGarlicPush();
+		}
+	}
 }

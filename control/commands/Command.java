@@ -8,7 +8,9 @@ public abstract class Command {
 	  protected final String shortcut;
 	  private final String details; 
 	  private final String help;
-
+	  
+	  protected static final String notEnoughCoins= "Not enough coins";
+	  protected static final String invalidPosition = "Invalid position";
 	  protected static final String incorrectNumberOfArgsMsg = "Incorrect number of arguments";
 	  protected static final String incorrectArgsMsg = "Incorrect arguments format";
 	  

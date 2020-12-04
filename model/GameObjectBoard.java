@@ -31,5 +31,8 @@ public class GameObjectBoard {
 	public void someoneWins() {
 		gameObjects.someoneWins();
 	}
+	public void pushVampires() {
+		gameObjects.pushVampires();
+	}
 }
 

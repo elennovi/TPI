@@ -25,8 +25,14 @@ public abstract class GameObject implements IAttack{
 	public void decreaseLife(int damage) { 
 		health -= damage;
 	}
+	public void setDeadObject() {
+		health = 0;
+	}
 	public void decreaseCol() {
 		--c;
+	}
+	public void increaseCol() {
+		++c;
 	}
 	public boolean isDead() {
 		return health == 0;

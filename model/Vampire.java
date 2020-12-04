@@ -25,8 +25,11 @@ public class Vampire extends GameObject{
 		if (!game.somethingInPosition(getRow(), getCol() - 1) && canAdvanceCycle())
 			decreaseCol();
 		else if (game.somethingInPosition(getRow(), getCol() - 1))
-			cyclePair = !game.isAPairCycle(); // si tiene algo delante entonces cambiaremos su
+			changeCycle();// si tiene algo delante entonces cambiaremos su
 		// ciclo
+	}
+	public void changeCycle() {
+		cyclePair = !game.isAPairCycle();
 	}
 	public boolean canAdvanceCycle() { // Puede avanzar si la paridad de ciclo
 		// de creación del vampiro es igual que la creación de la paridad del
@@ -77,6 +80,13 @@ public class Vampire extends GameObject{
 	}
 	public void someoneWins() {
 		if (hasArrived())
-			Vampire.wins = true;	
+			Vampire.wins = true;
+	}
+	public boolean receiveGarlicPush() {
+		increaseCol(); // se le añade una posicion a las columnas
+		changeCycle(); // le cambiamos el ciclo de movimiento
+		if (!game.inPlane(getRow(), getCol())) // si no está en el plano
+			setDeadObject(); // lo ponemos la vida a 0 porque no está en el tablero
+		return true;
 	}
 }
