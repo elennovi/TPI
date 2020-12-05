@@ -12,7 +12,7 @@ public class Player {
 	public void addCoins(int numCoins) { // Genera un número aleatorio y comprueba si
 		coins += numCoins; 
 	}
-	public void slayerBought() { // Si el jugador canjea monedas por un slayer
-		coins -= 50; // le restamos las monedas que cuesta
+	public void decreaseCoins(int cost) { // Si el jugador canjea monedas por un slayer
+		coins -= cost; // le restamos las monedas que cuesta
 	}
 }

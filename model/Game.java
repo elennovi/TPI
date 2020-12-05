@@ -59,31 +59,46 @@ public class Game implements IPrintable{
 				"Remaining vampires: " + stringRemainingVampires() + "\n" + 
 				"Vampires on the board: " + stringVampiresOnBoard();
 	}
-	public void addSlayer(int row, int col) { // Se añade un slayer y se
+	public void addSlayer(int row, int col, int cost) { // Se añade un slayer y se
 		// le restan las monedas
 			objects.addObject(new Slayer(row, col, this));
-			player.slayerBought();
+			decreasePlayerCoins(cost);
 	}
-	public void addVampire() { 
-		if(canAddVampire()) {
-			int row = rand.nextInt(level.getRows());
-			int col = level.getCols() - 1;
-			if (!objects.somethingInPosition(row, col))
-				objects.addObject(new Vampire(row, col, this));
+	public void addVampireRandom() { 
+		if(remainingVampires() && vampireFrequency()) {
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				addVampire(randRow, randCol);
 		}
+	}
+	public void addVampire(int row, int col) {
+		objects.addObject(new Vampire(row, col, this));
+	}
+	public void addSpecialVampire(int row, int col, String type) {
+		switch(type) {
+		case "D":
+			//objects.addObject(new Dracula(row, col, this));
+			break;
+		case "E":
+			objects.addObject(new ExplosiveVampire(row, col, this));
+			break;
+		}
+	}
+	public boolean remainingVampires() {
+		return (Vampire.getNumVampires() + Vampire.getDeadVampires() < level.getNumberOfVampires());
+	}
+	public boolean vampireFrequency() {
+		return rand.nextDouble() < level.getVampireFrequency();
 	}
 	public void update() {
 		if(rand.nextFloat() > 0.5) // se añaden monedas
 			player.addCoins(numCoinsPerCicle); // Se añaden los coins
 		objects.update(rand); // Se actualiza el tablero
-		addVampire();
+		addVampireRandom();
 		checkAnyWinner();
 		if (!isFinished())
 			addCycle();
-	}
-	public boolean canAddVampire() {
-		return (Vampire.getNumVampires() + Vampire.getDeadVampires() < level.getNumberOfVampires())
-		&& (rand.nextDouble() < level.getVampireFrequency());
 	}
 	public boolean canAddSlayer() { // Se puede
 		// añadir un slayer si tiene al menos 50 monedas
@@ -133,5 +148,11 @@ public class Game implements IPrintable{
 	}
 	public boolean haveEnoughMoney(int coins) {
 		return player.getCoins() >= coins; 
+	}
+	public void killAllVampires() {
+		objects.killAllVampires();
+	}
+	public void decreasePlayerCoins(int cost) {
+		player.decreaseCoins(cost);
 	}
 }

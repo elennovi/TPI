@@ -34,5 +34,8 @@ public class GameObjectBoard {
 	public void pushVampires() {
 		gameObjects.pushVampires();
 	}
+	public void killAllVampires() {
+		gameObjects.killAllVampires();
+	}
 }
 

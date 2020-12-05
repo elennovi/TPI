@@ -9,7 +9,9 @@ public class CommandGenerator {
 			new ExitCommand(),
 			new UpdateCommand(),
 			new SuperCoinsCommand(),
-			new GarlicPushCommand()
+			new GarlicPushCommand(),
+			new LightFlashCommand(),
+			new AddVampireCommand()
 	};
 	
 	public static Command parseCommand(String[] commandWords) {

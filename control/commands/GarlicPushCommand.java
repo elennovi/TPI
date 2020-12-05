@@ -3,14 +3,14 @@ package control.commands;
 import model.Game;
 
 public class GarlicPushCommand extends Command {
-	public static final int cost = 10;
+	public static final int COST = 10;
 	
 	public GarlicPushCommand() {
 		super("garlic", "g", "[g]arlic", "push all vampires one position");
 	}
 
 	public boolean execute(Game game) {
-		if (game.haveEnoughMoney(cost)) {
+		if (game.haveEnoughMoney(COST)) {
 			game.pushVampires();
 			game.update();
 			return true;

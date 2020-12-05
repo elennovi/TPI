@@ -3,9 +3,10 @@ package control.commands;
 import model.Game;
 
 public class AddCommand extends Command{
-	private static int numArgsCommandAdd = 3;
+	private static int numArgsCommandAddSlayer = 3;
 	private int row;
 	private int col;
+	public static final int COST = 50;
 	
 	public AddCommand() {
 		super("add", "a", "[a]dd <x> <y>", "add a slayer in position x, y");
@@ -19,7 +20,7 @@ public class AddCommand extends Command{
 		else {
 			// check if the player has enough coins
 			if(game.canAddSlayer()) {
-				game.addSlayer(row, col);
+				game.addSlayer(row, col, COST);
 				game.update();
 				return true;
 			}
@@ -31,9 +32,9 @@ public class AddCommand extends Command{
 
 	public Command parse(String[] commandWords) {
 		if (matchCommandName(commandWords[0])) {
-			if (commandWords.length > numArgsCommandAdd)
+			if (commandWords.length > numArgsCommandAddSlayer)
 				System.out.println("[ERROR]: " + incorrectArgsMsg);
-			else if (commandWords.length < numArgsCommandAdd)
+			else if (commandWords.length < numArgsCommandAddSlayer)
 				System.out.println("[ERROR]: " + incorrectNumberOfArgsMsg);
 			else {
 				col = Integer.parseInt(commandWords[1]);

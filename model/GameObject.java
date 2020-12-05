@@ -35,7 +35,7 @@ public abstract class GameObject implements IAttack{
 		++c;
 	}
 	public boolean isDead() {
-		return health == 0;
+		return health <= 0;
 	}
 	public abstract void advance();
 	public abstract void deleteObjects();

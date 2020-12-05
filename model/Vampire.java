@@ -89,4 +89,8 @@ public class Vampire extends GameObject{
 			setDeadObject(); // lo ponemos la vida a 0 porque no está en el tablero
 		return true;
 	}
+	public boolean receiveLightFlash() {
+		setDeadObject();
+		return true;
+	}
 }

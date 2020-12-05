@@ -13,6 +13,7 @@ public abstract class Command {
 	  protected static final String invalidPosition = "Invalid position";
 	  protected static final String incorrectNumberOfArgsMsg = "Incorrect number of arguments";
 	  protected static final String incorrectArgsMsg = "Incorrect arguments format";
+	  protected static final String noMoreVampiresLeft = "No more remaining vampires left";
 	  
 	  public Command(String name,  String shortcut, String details, String help){    
 	    this.name = name;

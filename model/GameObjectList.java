@@ -55,8 +55,11 @@ public class GameObjectList {
 		return "";
 	}
 	public void pushVampires() {
-		for(IAttack o: gameObjects) {
+		for(IAttack o: gameObjects)
 			o.receiveGarlicPush();
-		}
+	}
+	public void killAllVampires() {
+		for(IAttack o: gameObjects)
+			o.receiveLightFlash();
 	}
 }
