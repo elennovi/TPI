@@ -54,10 +54,13 @@ public class Game implements IPrintable{
 		return Integer.toString(Vampire.getNumVampires());
 	}
 	public String getInfo() {
-		return "Number of cycles: " + cycles + "\n" + 
+		String message = "Number of cycles: " + cycles + "\n" + 
 				"Coins: " + player.getCoins() + "\n" + 
 				"Remaining vampires: " + stringRemainingVampires() + "\n" + 
-				"Vampires on the board: " + stringVampiresOnBoard();
+				"Vampires on the board: " + stringVampiresOnBoard() + "\n";
+		if (Dracula.isAlive())
+			message += "Dracula is alive!" + "\n";
+		return message;
 	}
 	public void addSlayer(int row, int col, int cost) { // Se añade un slayer y se
 		// le restan las monedas
@@ -72,15 +75,31 @@ public class Game implements IPrintable{
 				addVampire(randRow, randCol);
 		}
 	}
+	public void addDraculaRandom() {
+		if(remainingVampires() && vampireFrequency()) {
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				addSpecialVampire(randRow, randCol, "d");
+		}
+	}
+	public void addExplosiveVampireRandom() {
+		if(remainingVampires() && vampireFrequency()) {
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				addSpecialVampire(randRow, randCol, "e");
+		}
+	}
 	public void addVampire(int row, int col) {
 		objects.addObject(new Vampire(row, col, this));
 	}
 	public void addSpecialVampire(int row, int col, String type) {
 		switch(type) {
-		case "D":
-			//objects.addObject(new Dracula(row, col, this));
+		case "d":
+			objects.addObject(new Dracula(row, col, this));
 			break;
-		case "E":
+		case "e":
 			objects.addObject(new ExplosiveVampire(row, col, this));
 			break;
 		}
@@ -95,7 +114,10 @@ public class Game implements IPrintable{
 		if(rand.nextFloat() > 0.5) // se añaden monedas
 			player.addCoins(numCoinsPerCicle); // Se añaden los coins
 		objects.update(rand); // Se actualiza el tablero
-		addVampireRandom();
+		if (!Dracula.isAlive())
+			addDraculaRandom(); // 1º dracula
+		addExplosiveVampireRandom(); // 2º vampiro explosivo
+		addVampireRandom(); // 3º vampiro generico
 		checkAnyWinner();
 		if (!isFinished())
 			addCycle();

@@ -3,11 +3,11 @@ public class Slayer extends GameObject{
 	private static final int COST = 50; // Es estática ya que es común para todos los slayers
 	private static final int HEALTH = 3;
 	private static final int HARM = 1;
-	private static final String LETTER = "S";
+	private static final String GENERICLETTER = "S";
 	private Game game;
 	
 	public Slayer(int r, int c, Game game) {
-		super(r, c, HEALTH);
+		super(r, c, HEALTH, GENERICLETTER);
 		this.game = game;
 	}
 	public static int getCostSlayer() {
@@ -28,11 +28,12 @@ public class Slayer extends GameObject{
 		return true;
 	} // Solo se implementa la función de recibir ataque de vampiro
 	// porque los slayers no dañan a los slayers
-	public String getPositionToString(int x, int y) {
-		return LETTER + " [" + getHealth() + "]";
-	} 
 	public void someoneWins() { // Determina si han perdido los vampiros
 		if (Vampire.getDeadVampires() == game.getNumVampires())
-		Vampire.setLoose();
+			Vampire.setLoose();
+	}
+	public boolean receiveDraculaAttack() {
+		setDeadObject();
+		return true;
 	}
 }

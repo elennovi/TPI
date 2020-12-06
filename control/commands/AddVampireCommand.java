@@ -19,7 +19,7 @@ public class AddVampireCommand extends Command {
 			if(game.remainingVampires()) {
 				if(numArgs == numArgsCommandAddVampi)
 					game.addVampire(row, col);
-				else if(numArgs == numArgsCommandAddSpecialVampi)
+				else if(numArgs == numArgsCommandAddSpecialVampi) 
 					game.addSpecialVampire(row, col, type);
 				return true;
 			}

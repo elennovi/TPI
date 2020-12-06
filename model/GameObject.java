@@ -4,11 +4,13 @@ public abstract class GameObject implements IAttack{
 	private int r;
 	private int c;
 	private int health;
+	private String letter;
 	
-	public GameObject(int r, int c, int health) {
+	public GameObject(int r, int c, int health, String letter) {
 		this.r = r;
 		this.c = c;
 		this.health = health;
+		this.letter = letter;
 	}
 	public boolean isInPosition(int i, int j) { // Devuelve un boolean indicando que si el slayer
 		return r == i && c == j; // se encuentra en una posición (i, j) dada
@@ -40,6 +42,8 @@ public abstract class GameObject implements IAttack{
 	public abstract void advance();
 	public abstract void deleteObjects();
 	public abstract void someoneWins();
-	public abstract String getPositionToString(int i, int j);
+	public String getPositionToString(int i, int j) {
+		return letter + " [" + health + "]";
+	}
 	
 }
