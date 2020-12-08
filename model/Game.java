@@ -142,7 +142,9 @@ public class Game implements IPrintable{
 		return objects.somethingInPosition(r, c);
 	}
 	public void checkAnyWinner() {
-		objects.someoneWins();
+		objects.vampiresWins();
+		if (Vampire.getDeadVampires() == getNumVampires())
+			Vampire.setLoose();
 	}
 	public boolean inPlane(int x, int y) {
     	return x >= 0 && x < Rows() && y >= 0 && y < Cols();

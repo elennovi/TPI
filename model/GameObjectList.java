@@ -18,9 +18,10 @@ public class GameObjectList {
 	public void addObject(GameObject object) { 
 		gameObjects.add(object);
 	}
-	public void someoneWins() {
+	public void vampiresWins() {
 		for(GameObject o: gameObjects)
-			o.someoneWins();
+			if (o.vampiresWins())
+				break;
 	}
 	public void advance() {
 		for(GameObject o: gameObjects)

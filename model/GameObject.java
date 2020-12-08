@@ -41,7 +41,7 @@ public abstract class GameObject implements IAttack{
 	}
 	public abstract void advance();
 	public abstract void deleteObjects();
-	public abstract void someoneWins();
+	public abstract boolean vampiresWins();
 	public String getPositionToString(int i, int j) {
 		return letter + " [" + health + "]";
 	}

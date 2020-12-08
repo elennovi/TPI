@@ -89,9 +89,13 @@ public class Vampire extends GameObject{
 		decreaseLife(damage);
 		return true;
 	}
-	public void someoneWins() {
-		if (hasArrived())
+	public boolean vampiresWins() {
+		if (hasArrived()) {
 			Vampire.wins = true;
+			return true;
+		}
+		else 
+			return false;
 	}
 	public boolean receiveGarlicPush() {
 		increaseCol();

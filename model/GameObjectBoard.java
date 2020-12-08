@@ -28,8 +28,8 @@ public class GameObjectBoard {
 	public String getPositionToString(int i, int j) {
 		return gameObjects.getPositionToString(i, j);
 	}
-	public void someoneWins() {
-		gameObjects.someoneWins();
+	public void vampiresWins() {
+		gameObjects.vampiresWins();
 	}
 	public void pushVampires() {
 		gameObjects.pushVampires();

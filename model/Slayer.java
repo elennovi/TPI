@@ -28,10 +28,7 @@ public class Slayer extends GameObject{
 		return true;
 	} // Solo se implementa la función de recibir ataque de vampiro
 	// porque los slayers no dañan a los slayers
-	public void someoneWins() { // Determina si han perdido los vampiros
-		if (Vampire.getDeadVampires() == game.getNumVampires())
-			Vampire.setLoose();
-	}
+	public boolean vampiresWins() {return false;}
 	public boolean receiveDraculaAttack() {
 		setDeadObject();
 		return true;
