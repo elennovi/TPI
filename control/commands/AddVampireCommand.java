@@ -1,5 +1,6 @@
 package control.commands;
 
+import model.Dracula;
 import model.Game;
 
 public class AddVampireCommand extends Command {
@@ -17,11 +18,16 @@ public class AddVampireCommand extends Command {
 	public boolean execute(Game game) {
 		if(game.inPlane(row, col) && !game.somethingInPosition(row, col)) {
 			if(game.remainingVampires()) {
-				if(numArgs == numArgsCommandAddVampi)
+				if(numArgs == numArgsCommandAddVampi) {
 					game.addVampire(row, col);
-				else if(numArgs == numArgsCommandAddSpecialVampi) 
-					game.addSpecialVampire(row, col, type);
-				return true;
+					return true;
+				}
+				else if(numArgs == numArgsCommandAddSpecialVampi) {
+					if (game.addSpecialVampire(row, col, type))
+						return true;
+					else
+						System.out.println(draculaIsAlive);
+				}
 			}
 			else
 				System.out.println(noMoreVampiresLeft);
@@ -33,21 +39,16 @@ public class AddVampireCommand extends Command {
 
 	public Command parse(String[] commandWords) {
 		if(matchCommandName(commandWords[0])) {
-			if(commandWords.length > numArgsCommandAddSpecialVampi)
-				System.out.println("[ERROR]: " + incorrectArgsMsg);
-			else if(commandWords.length < numArgsCommandAddVampi)
-				System.out.println("[ERROR]: " + incorrectNumberOfArgsMsg);
-			else {
-				numArgs = commandWords.length;
-				if(commandWords.length == numArgsCommandAddVampi) {
-					col = Integer.parseInt(commandWords[1]);
-					row = Integer.parseInt(commandWords[2]);
-				}
-				else if(commandWords.length == numArgsCommandAddSpecialVampi) {
-					type = commandWords[1];
-					col = Integer.parseInt(commandWords[2]);
-					row = Integer.parseInt(commandWords[3]);
-				}
+			numArgs = commandWords.length;
+			if(commandWords.length == numArgsCommandAddVampi) {
+				col = Integer.parseInt(commandWords[1]);
+				row = Integer.parseInt(commandWords[2]);
+				return this;
+			}
+			else if(commandWords.length == numArgsCommandAddSpecialVampi) {
+				type = commandWords[1];
+				col = Integer.parseInt(commandWords[2]);
+				row = Integer.parseInt(commandWords[3]);
 				return this;
 			}
 		}

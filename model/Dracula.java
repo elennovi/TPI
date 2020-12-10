@@ -26,8 +26,10 @@ public class Dracula extends Vampire{
 		return false;
 	}
 	public void deleteObjects() {
-		alive = false;
+		setDeadDracula();
 		super.deleteObjects();
 	}
-
+	public static void setDeadDracula() {
+		alive = false;
+	}
 }

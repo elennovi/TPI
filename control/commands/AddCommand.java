@@ -19,7 +19,7 @@ public class AddCommand extends Command{
 			System.out.println(invalidPosition);
 		else {
 			// check if the player has enough coins
-			if(game.canAddSlayer()) {
+			if(game.haveEnoughMoney(COST)) {
 				game.addSlayer(row, col, COST);
 				game.update();
 				return true;
@@ -32,11 +32,7 @@ public class AddCommand extends Command{
 
 	public Command parse(String[] commandWords) {
 		if (matchCommandName(commandWords[0])) {
-			if (commandWords.length > numArgsCommandAddSlayer)
-				System.out.println("[ERROR]: " + incorrectArgsMsg);
-			else if (commandWords.length < numArgsCommandAddSlayer)
-				System.out.println("[ERROR]: " + incorrectNumberOfArgsMsg);
-			else {
+			if (commandWords.length == numArgsCommandAddSlayer) {
 				col = Integer.parseInt(commandWords[1]);
 				row = Integer.parseInt(commandWords[2]);
 				return this;

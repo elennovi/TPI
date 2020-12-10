@@ -8,7 +8,7 @@ import model.Game;
 public class Controller {
 	
 	public final String prompt = "Command > ";
-	public static final String unknownCommandMsg ="Unknown command";
+	public static final String unknownCommandMsg = "[ERROR]: " + "Unknown command";
 
     private Game game;
     private Scanner scanner;

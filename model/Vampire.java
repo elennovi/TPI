@@ -34,9 +34,10 @@ public class Vampire extends GameObject{
 		// avanzar 
 		if (!game.somethingInPosition(getRow(), getCol() - 1) && canAdvanceCycle())
 			decreaseCol();
-		else if (game.somethingInPosition(getRow(), getCol() - 1) || !cycleDistinctGameCycle())
+		else if (!cycleDistinctGameCycle())
 			changeCycle();// si tiene algo delante entonces cambiaremos su
 		// ciclo
+		// game.somethingInPosition(getRow(), getCol() - 1) || 
 	}
 	
 	public void changeCycle() {
@@ -98,13 +99,14 @@ public class Vampire extends GameObject{
 			return false;
 	}
 	public boolean receiveGarlicPush() {
-		increaseCol();
-		if (!canAdvanceCycle()) 
+		// si hay algo en esa posición no puede retroceder
+		if (!game.somethingInPosition(getRow(), getCol() + 1))
+			increaseCol();
+		if (canAdvanceCycle())
 			changeCycle();
 		if (!game.inPlane(getRow(), getCol())) { // si no está en el plano
 			setDeadObject(); // lo ponemos la vida a 0 porque no está en el tablero
 		}
-		increaseCol();
 		return true;
 	}
 	public boolean receiveLightFlash() {

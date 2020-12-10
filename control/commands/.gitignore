@@ -9,3 +9,5 @@
 /GarlicPushCommand.class
 /AddVampireCommand.class
 /LightFlashCommand.class
+/AddBloodBank.class
+/AddBloodBankCommand.class

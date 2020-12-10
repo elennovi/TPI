@@ -44,6 +44,6 @@ public class GamePrinter {
 		        else str.append(lineEdge);   
 		}
 
-		return printable.getInfo() + "\n" + str.toString();
+		return printable.getInfo() + str.toString();
 	    }
 }

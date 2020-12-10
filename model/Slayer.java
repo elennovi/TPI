@@ -10,6 +10,10 @@ public class Slayer extends GameObject{
 		super(r, c, HEALTH, GENERICLETTER);
 		this.game = game;
 	}
+	public Slayer(int r, int c, Game game, int health, String letter) {
+		super(r, c, health, letter);
+		this.game = game;
+	}
 	public static int getCostSlayer() {
 		return COST;
 	}

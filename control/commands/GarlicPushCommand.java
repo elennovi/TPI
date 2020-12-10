@@ -6,12 +6,13 @@ public class GarlicPushCommand extends Command {
 	public static final int COST = 10;
 	
 	public GarlicPushCommand() {
-		super("garlic", "g", "[g]arlic", "push all vampires one position");
+		super("garlic", "g", "[g]arlic ", "pushes back vampires");
 	}
 
 	public boolean execute(Game game) {
 		if (game.haveEnoughMoney(COST)) {
 			game.pushVampires();
+			game.decreasePlayerCoins(COST);
 			game.update();
 			return true;
 		}

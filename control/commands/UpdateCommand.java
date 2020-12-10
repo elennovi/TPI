@@ -15,7 +15,7 @@ public class UpdateCommand extends Command{
 	public Command parse(String[] commandWords) {
 		if (matchCommandName(commandWords[0]) || commandWords[0].equals("")) {
 			if (commandWords.length > 1)
-				System.err.println(incorrectArgsMsg);
+				System.out.println(unknownCommand);
 			else
 				return this;
 		}

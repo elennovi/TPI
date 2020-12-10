@@ -9,11 +9,13 @@ public abstract class Command {
 	  private final String details; 
 	  private final String help;
 	  
-	  protected static final String notEnoughCoins= "Not enough coins";
-	  protected static final String invalidPosition = "Invalid position";
-	  protected static final String incorrectNumberOfArgsMsg = "Incorrect number of arguments";
-	  protected static final String incorrectArgsMsg = "Incorrect arguments format";
-	  protected static final String noMoreVampiresLeft = "No more remaining vampires left";
+	  protected static final String notEnoughCoins= "[ERROR]: " + "Not enough coins";
+	  protected static final String invalidPosition = "[ERROR]: " + "Invalid position";
+//	  protected static final String incorrectNumberOfArgsMsg = "[ERROR]: " + "Incorrect number of arguments";
+//	  protected static final String incorrectArgsMsg = "[ERROR]: " + "Incorrect arguments format";
+	  protected static final String noMoreVampiresLeft = "[ERROR]: " + "No more remaining vampires left";
+	  protected static final String draculaIsAlive = "[ERROR]: " + "Dracula is alive";
+	  protected static final String unknownCommand = "[ERROR]: " + "Unknown command";
 	  
 	  public Command(String name,  String shortcut, String details, String help){    
 	    this.name = name;
@@ -33,11 +35,10 @@ public abstract class Command {
 	  
 	  protected Command parseNoParamsCommand(String[] words) {
 			if (matchCommandName(words[0])) {
-				if (words.length != 1) {
-					System.out.println(incorrectArgsMsg);
+				if (words.length > 1)	
 					return null;
-				}
-				return this;
+				else
+					return this;
 			}
 			return null;
 	  }

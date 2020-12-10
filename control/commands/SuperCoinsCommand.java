@@ -11,7 +11,6 @@ public class SuperCoinsCommand extends Command {
 
 	public boolean execute(Game game) {
 		game.addCoins(NUM_COINS);
-		game.update();
 		return true;
 	}
 

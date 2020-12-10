@@ -1,7 +1,6 @@
 package model;
 
 import java.util.ArrayList;
-
 public class GameObjectList {
 	private ArrayList <GameObject> gameObjects;
 	

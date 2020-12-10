@@ -25,6 +25,7 @@ public class Game implements IPrintable{
 		player = new Player();
 		objects = new GameObjectBoard(level);
 		Exit = false;
+		Dracula.setDeadDracula();
 	}
 	public void addCycle() {
 		++cycles;
@@ -59,8 +60,12 @@ public class Game implements IPrintable{
 				"Remaining vampires: " + stringRemainingVampires() + "\n" + 
 				"Vampires on the board: " + stringVampiresOnBoard() + "\n";
 		if (Dracula.isAlive())
-			message += "Dracula is alive!" + "\n";
+			message += "Dracula is alive" + "\n";
 		return message;
+	}
+	public void addBloodBank(int row, int col, int cost) {
+		objects.addObject(new BloodBank(row, col, this, cost));
+		decreasePlayerCoins(cost);
 	}
 	public void addSlayer(int row, int col, int cost) { // Se añade un slayer y se
 		// le restan las monedas
@@ -94,15 +99,18 @@ public class Game implements IPrintable{
 	public void addVampire(int row, int col) {
 		objects.addObject(new Vampire(row, col, this));
 	}
-	public void addSpecialVampire(int row, int col, String type) {
+	public boolean addSpecialVampire(int row, int col, String type) {
 		switch(type) {
 		case "d":
-			objects.addObject(new Dracula(row, col, this));
+			if (!Dracula.isAlive())
+				objects.addObject(new Dracula(row, col, this));
+			else return false;
 			break;
 		case "e":
 			objects.addObject(new ExplosiveVampire(row, col, this));
 			break;
 		}
+		return true;
 	}
 	public boolean remainingVampires() {
 		return (Vampire.getNumVampires() + Vampire.getDeadVampires() < level.getNumberOfVampires());
@@ -114,17 +122,13 @@ public class Game implements IPrintable{
 		if(rand.nextFloat() > 0.5) // se añaden monedas
 			player.addCoins(numCoinsPerCicle); // Se añaden los coins
 		objects.update(rand); // Se actualiza el tablero
+		addVampireRandom();
 		if (!Dracula.isAlive())
-			addDraculaRandom(); // 1º dracula
-		addExplosiveVampireRandom(); // 2º vampiro explosivo
-		addVampireRandom(); // 3º vampiro generico
+			addDraculaRandom();
+		addExplosiveVampireRandom(); 
 		checkAnyWinner();
 		if (!isFinished())
 			addCycle();
-	}
-	public boolean canAddSlayer() { // Se puede
-		// añadir un slayer si tiene al menos 50 monedas
-		return (player.getCoins() >= Slayer.getCostSlayer());
 	}
 	public String getWinnerMessage() {
 		if(Vampire.Wins()) // Si ganan los vampiros
@@ -178,5 +182,8 @@ public class Game implements IPrintable{
 	}
 	public void decreasePlayerCoins(int cost) {
 		player.decreaseCoins(cost);
+	}
+	public void killObjectInPosition(int row, int col) {
+		
 	}
 }
