@@ -10,11 +10,19 @@ public class Game implements IPrintable{
 	private GamePrinter printer;
 	private GameObjectBoard objects;
 	private int cycles;
-	private static final int numCoinsPerCicle = 10;
 	private static boolean Exit;
+	private static final int NUM_COINS_PER_CYCLE = 10;
+	private static final int COST_ADD_COMMAND = 50;
+	private static final int COST_LIGHT_COMMAND = 50;
+	private static final int COST_GARLIC_COMMAND = 10;
+	private static final String ERROR = "[ERROR]: ";
+	private static final String notEnoughCoins= ERROR + "Not enough coins";
+    private static final String invalidPosition = ERROR + "Invalid position";
+    private static final String noMoreVampiresLeft = ERROR + "No more remaining vampires left";
+    private static final String draculaIsAlive = ERROR + "Dracula is alive";
+    private static final String invalidType = ERROR + "Invalid type";
 	
 	public Game(long seed, Level level) {
-		// genera un random que le pasa al resto de objetos del juego
 		rand = new Random(seed);
 		this.level = level;
 		printer = new GamePrinter(this, level.getCols(), level.getRows());
@@ -30,8 +38,7 @@ public class Game implements IPrintable{
 	public void addCycle() {
 		++cycles;
 	}
-	public boolean isFinished() { // El juego acaba cuando los vampiros
-		// mueren o cuando han llegado a la meta
+	public boolean isFinished() {
 		return Vampire.Wins() || Vampire.Loose() || Exit;
 	}
 	public int Rows() {
@@ -46,12 +53,10 @@ public class Game implements IPrintable{
 	public String toString() {
 		return printer.toString();
 	}
-	public String stringRemainingVampires() { // Los vampiros que quedan
-		// por salir en forma string
+	public String stringRemainingVampires() {
 		return Integer.toString(level.getNumberOfVampires() - (Vampire.getNumVampires() + Vampire.getDeadVampires()));
 	}
-	public String stringVampiresOnBoard() { // Devuelve los vampiros
-		// que hay en la lista de vampiros 
+	public String stringVampiresOnBoard() {
 		return Integer.toString(Vampire.getNumVampires());
 	}
 	public String getInfo() {
@@ -67,48 +72,40 @@ public class Game implements IPrintable{
 		objects.addObject(new BloodBank(row, col, this, cost));
 		decreasePlayerCoins(cost);
 	}
-	public void addSlayer(int row, int col, int cost) { // Se añade un slayer y se
-		// le restan las monedas
+	public void addSlayer(int row, int col, int cost) {
 			objects.addObject(new Slayer(row, col, this));
 			decreasePlayerCoins(cost);
 	}
-	public void addVampireRandom() { 
-		if(remainingVampires() && vampireFrequency()) {
-			int randRow = rand.nextInt(level.getRows());
-			int randCol = level.getCols() - 1;
-			if(!objects.somethingInPosition(randRow, randCol))
-				addVampire(randRow, randCol);
-		}
+	public void addRandomVampires() { 
+		String type[] = {"", "d", "e"};
+		for (String t: type)
+			if (t != "d" || (t == "d" && !Dracula.isAlive()))
+				if (remainingVampires() && vampireFrequency()){
+					int randRow = rand.nextInt(level.getRows());
+					int randCol = level.getCols() - 1;
+					if(!objects.somethingInPosition(randRow, randCol))
+						addVampire(randRow, randCol, t);
+				}
 	}
-	public void addDraculaRandom() {
-		if(remainingVampires() && vampireFrequency()) {
-			int randRow = rand.nextInt(level.getRows());
-			int randCol = level.getCols() - 1;
-			if(!objects.somethingInPosition(randRow, randCol))
-				addSpecialVampire(randRow, randCol, "d");
-		}
-	}
-	public void addExplosiveVampireRandom() {
-		if(remainingVampires() && vampireFrequency()) {
-			int randRow = rand.nextInt(level.getRows());
-			int randCol = level.getCols() - 1;
-			if(!objects.somethingInPosition(randRow, randCol))
-				addSpecialVampire(randRow, randCol, "e");
-		}
-	}
-	public void addVampire(int row, int col) {
-		objects.addObject(new Vampire(row, col, this));
-	}
-	public boolean addSpecialVampire(int row, int col, String type) {
+	public boolean addVampire(int row, int col, String type) {
 		switch(type) {
 		case "d":
 			if (!Dracula.isAlive())
 				objects.addObject(new Dracula(row, col, this));
-			else return false;
+			else {
+				System.out.println(draculaIsAlive);
+				return false;
+			}
 			break;
 		case "e":
 			objects.addObject(new ExplosiveVampire(row, col, this));
 			break;
+		case "": 
+			objects.addObject(new Vampire(row, col, this));
+			break;
+		default:
+			System.out.println(invalidType);
+			return false;
 		}
 		return true;
 	}
@@ -119,30 +116,77 @@ public class Game implements IPrintable{
 		return rand.nextDouble() < level.getVampireFrequency();
 	}
 	public void update() {
-		if(rand.nextFloat() > 0.5) // se añaden monedas
-			player.addCoins(numCoinsPerCicle); // Se añaden los coins
-		objects.update(rand); // Se actualiza el tablero
-		addVampireRandom();
-		if (!Dracula.isAlive())
-			addDraculaRandom();
-		addExplosiveVampireRandom(); 
+		if(rand.nextFloat() > 0.5)
+			player.addCoins(NUM_COINS_PER_CYCLE);
+		objects.update(rand);
+		addRandomVampires(); 
 		checkAnyWinner();
 		if (!isFinished())
 			addCycle();
 	}
+	public boolean addVampireCommand(String type, int row, int col) {
+		if(inPlane(row, col) && !somethingInPosition(row, col)) {
+            if(remainingVampires()) {
+                if (addVampire(row, col, type)) return true;
+            }
+            else System.out.println(noMoreVampiresLeft);
+        }
+        else System.out.println(invalidPosition);    
+        return false;
+	}
+	public boolean addSlayerCommand(int row, int col) {
+		if(!inPlane(row, col) || isInLastCol(col) || somethingInPosition(row, col))
+			System.out.println(invalidPosition);
+		else if(haveEnoughMoney(COST_ADD_COMMAND)) {
+				addSlayer(row, col, COST_ADD_COMMAND);
+				update();
+				return true;
+		}
+		else System.out.println(notEnoughCoins);
+		return false;
+	}
+	public boolean lightFlashCommand() {
+		if(haveEnoughMoney(COST_LIGHT_COMMAND)) {
+			killAllVampires();
+			decreasePlayerCoins(COST_LIGHT_COMMAND);
+			update();
+			return true;
+		}
+		else System.out.println(notEnoughCoins);
+		return false;
+	}
+	public boolean addBloodBankCommand(int row, int col, int cost) {
+		if(inPlane(row, col) && !somethingInPosition(row, col) && !isInLastCol(col)) {
+			if (haveEnoughMoney(cost)) {
+				addBloodBank(row, col, cost);
+				update();
+				return true;
+			}
+			else System.out.println(notEnoughCoins);
+		}
+		else System.out.println(invalidPosition);	
+		return false;
+	}
+	public boolean garlicPushCommand() {
+		if (haveEnoughMoney(COST_GARLIC_COMMAND)) {
+			pushVampires();
+			decreasePlayerCoins(COST_GARLIC_COMMAND);
+			update();
+			return true;
+		}
+		else System.out.println(notEnoughCoins);
+		return false;
+	}
 	public String getWinnerMessage() {
-		if(Vampire.Wins()) // Si ganan los vampiros
-			return "Vampires win!";
-		else if(Vampire.Loose()) // Si ganan los slayers (o pierden los vampiros)
-			return "Player wins";
+		if(Vampire.Wins()) return "Vampires win!";
+		else if(Vampire.Loose()) return "Player wins";
 		return "Nobody wins...";
 	}
 	public boolean isAPairCycle() { // Devuelve un valor indicando si
 		// el ciclo en el que se encuentra el  juego es par o impar
 		return cycles % 2 == 0;
 	}
-	public boolean somethingInPosition(int r,int c) { // Devuelve si hay
-		// algún objeto en esa posición
+	public boolean somethingInPosition(int r,int c) {
 		return objects.somethingInPosition(r, c);
 	}
 	public void checkAnyWinner() {
@@ -183,7 +227,5 @@ public class Game implements IPrintable{
 	public void decreasePlayerCoins(int cost) {
 		player.decreaseCoins(cost);
 	}
-	public void killObjectInPosition(int row, int col) {
-		
-	}
+	
 }

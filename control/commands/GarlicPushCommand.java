@@ -3,22 +3,17 @@ package control.commands;
 import model.Game;
 
 public class GarlicPushCommand extends Command {
-	public static final int COST = 10;
+	private static final String name = "garlic";
+	private static final String shortcut = "g";
+	private static final String details = "[g]arlic ";
+	private static final String help = "pushes back vampires";
 	
 	public GarlicPushCommand() {
-		super("garlic", "g", "[g]arlic ", "pushes back vampires");
+		super(name, shortcut, details, help);
 	}
 
 	public boolean execute(Game game) {
-		if (game.haveEnoughMoney(COST)) {
-			game.pushVampires();
-			game.decreasePlayerCoins(COST);
-			game.update();
-			return true;
-		}
-		else
-			System.out.println(notEnoughCoins);
-		return false;
+		return game.garlicPushCommand();
 	}
 
 	public Command parse(String[] commandWords) {

@@ -9,7 +9,6 @@ public class Dracula extends Vampire{
 		this.game = game;
 		alive = true;
 	}
-
 	public void attack() {
 		if (!isDead()) {
 			IAttack other = game.getAttackableInPosition(getRow(), getCol() - 1);
@@ -17,11 +16,9 @@ public class Dracula extends Vampire{
 				other.receiveDraculaAttack();
 		}
 	}
-
 	public static boolean isAlive() {
 		return alive;
 	}
-	
 	public boolean receiveLightFlash() {
 		return false;
 	}

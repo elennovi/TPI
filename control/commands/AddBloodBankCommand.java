@@ -7,24 +7,17 @@ public class AddBloodBankCommand extends Command {
 	private int row;
 	private int col;
 	private static final int numArgsCommandAddBloodBank = 4;
+	private static final String name = "bank";
+	private static final String shortcut = "b";
+	private static final String details = "[b]ank <x> <y> <z>";
+	private static final String help = "add a blood bank with cost z in position x, y.";
 	
 	public AddBloodBankCommand() {
-		super("bank", "b", "[b]ank <x> <y> <z>", "add a blood bank with cost z in position x, y.");
+		super(name, shortcut, details, help);
 	}
 
 	public boolean execute(Game game) {
-		if(game.inPlane(row, col) && !game.somethingInPosition(row, col) && !game.isInLastCol(col)) {
-			if (game.haveEnoughMoney(cost)) {
-				game.addBloodBank(row, col, cost);
-				game.update();
-				return true;
-			}
-			else
-				System.out.println(notEnoughCoins);
-		}
-		else
-			System.out.println(invalidPosition);	
-		return false;
+		return game.addBloodBankCommand(row, col, cost);
 	}
 
 	public Command parse(String[] commandWords) {

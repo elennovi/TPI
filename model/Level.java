@@ -31,7 +31,6 @@ public enum Level {
 	public int getRows() {
 		return this.dim_y;
 	}
-	
     public static Level parse(String inputString) {
         for (Level level : Level.values())
             if (level.name().equalsIgnoreCase(inputString)) 

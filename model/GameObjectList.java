@@ -5,10 +5,9 @@ public class GameObjectList {
 	private ArrayList <GameObject> gameObjects;
 	
 	public GameObjectList(Level level) {
-		gameObjects = new ArrayList <GameObject>(); // creamos una lista con objetos
+		gameObjects = new ArrayList <GameObject>(); 
 	}
-	public boolean isInPosition(int x, int y) { // Función que comprueba si 
-		// un slayer de la lista ocupa una determinada posición dada
+	public boolean isInPosition(int x, int y) {
 		for (GameObject o: gameObjects)
 			if (o.isInPosition(x, y))
 				return true;
@@ -24,22 +23,21 @@ public class GameObjectList {
 	}
 	public void advance() {
 		for(GameObject o: gameObjects)
-			o.advance(); // se le dice a todos los objetos
-		// que se muevan
+			o.advance();
 	}
 	public void removeDead() {
 		int i = 0;
 		while(i < gameObjects.size()) {
 			if(gameObjects.get(i).isDead()) {
 				gameObjects.get(i).deleteObjects(); // contabilizamos los muertos
-				gameObjects.remove(i); // lo eliminamos de la lista 
+				gameObjects.remove(i);
 			}
 			else
 				i++;
 		}
 	}
 	public void attack() {
-		for (GameObject i: gameObjects)
+		for (IAttack i: gameObjects)
 			i.attack();
 	}
 	public IAttack getAttackableInPosition(int row, int i) {

@@ -3,22 +3,16 @@ package control.commands;
 import model.Game;
 
 public class LightFlashCommand extends Command {
-	public static final int COST = 50;
-
+	private static final String name = "light";
+	private static final String shortcut = "l";
+	private static final String details = "[l]ight";
+	private static final String help = "kills all the vampires";
+	
 	public LightFlashCommand() {
-		super("light", "l", "[l]ight", "kills all the vampires");
-}
-
+		super(name, shortcut, details, help);
+	}
 	public boolean execute(Game game) {
-		if(game.haveEnoughMoney(COST)) {
-			game.killAllVampires();
-			game.decreasePlayerCoins(COST);
-			game.update();
-			return true;
-		}
-		else 
-			System.out.println(notEnoughCoins);
-		return false;
+		return game.lightFlashCommand();
 	}
 
 	public Command parse(String[] commandWords) {

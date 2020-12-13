@@ -12,8 +12,8 @@ public abstract class GameObject implements IAttack{
 		this.health = health;
 		this.letter = letter;
 	}
-	public boolean isInPosition(int i, int j) { // Devuelve un boolean indicando que si el slayer
-		return r == i && c == j; // se encuentra en una posición (i, j) dada
+	public boolean isInPosition(int i, int j) { 
+		return r == i && c == j; 
 	}
 	public int getRow() { 
 		return r;
@@ -39,11 +39,10 @@ public abstract class GameObject implements IAttack{
 	public boolean isDead() {
 		return health <= 0;
 	}
-	public abstract void advance();
-	public abstract void deleteObjects();
-	public abstract boolean vampiresWins();
 	public String getPositionToString(int i, int j) {
 		return letter + " [" + health + "]";
 	}
-	
+	public abstract void advance();
+	public abstract void deleteObjects();
+	public abstract boolean vampiresWins();
 }

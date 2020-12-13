@@ -13,7 +13,6 @@ public class CommandGenerator {
 			new AddBloodBankCommand(),
 			new SuperCoinsCommand(),
 			new AddVampireCommand()
-			
 	};
 	
 	public static Command parseCommand(String[] commandWords) {
