@@ -1,4 +1,4 @@
-Buffy the Vampire Slayer 2.0
+Buffy the Vampire Slayer 3.0
 Random generator initialized with seed: 1
 Number of cycles: 0
 Coins: 50
@@ -29,14 +29,23 @@ Vampires on the board: 1
    ------------------------------------------------------- 
 
 Command > 
-[DEBUG] Executing: 
-Number of cycles: 2
-Coins: 70
-Remaining vampires: 4
-Vampires on the board: 1
+[DEBUG] Executing: v 6 o
+[ERROR]: Unvalid argument for add vampire command, number expected: [v]ampire [<type>] <x> <y>. Type = {""|"D"|"E"}
+
+Command > 
+[DEBUG] Executing: v 6 0
+[ERROR]: Position (6, 0): Unvalid position
+[ERROR]: Failed to add this vampire 
+
+Command > 
+[DEBUG] Executing: v 5 0
+Number of cycles: 1
+Coins: 60
+Remaining vampires: 3
+Vampires on the board: 2
 
    ------------------------------------------------------- 
-  |       |       |       |       |       |       | V [5] |
+  |       |       |       |       |       | V [5] | V [5] |
    ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
@@ -44,298 +53,315 @@ Vampires on the board: 1
    ------------------------------------------------------- 
 
 Command > 
-[DEBUG] Executing: a 0 0
-Number of cycles: 3
-Coins: 30
-Remaining vampires: 4
-Vampires on the board: 1
+[DEBUG] Executing: v d 6 2
+Number of cycles: 1
+Coins: 60
+Remaining vampires: 2
+Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       | V [4] |       |
+  |       |       |       |       |       | V [5] | V [5] |
    ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       |       | D [5] |
+   ------------------------------------------------------- 
+
+Command > 
+[DEBUG] Executing: 
+Number of cycles: 2
+Coins: 70
+Remaining vampires: 2
+Vampires on the board: 3
+Dracula is alive
+
+   ------------------------------------------------------- 
+  |       |       |       |       |       | V [5] | V [5] |
+   ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |
+   ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       |       | D [5] |
+   ------------------------------------------------------- 
+
+Command > 
+[DEBUG] Executing: 
+Number of cycles: 3
+Coins: 80
+Remaining vampires: 2
+Vampires on the board: 3
+Dracula is alive
+
+   ------------------------------------------------------- 
+  |       |       |       |       | V [5] |       | V [5] |
+   ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       |       |       |
+   ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       | D [5] |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 4
-Coins: 30
-Remaining vampires: 3
-Vampires on the board: 2
+Coins: 80
+Remaining vampires: 2
+Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       | V [3] |       |
-   ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |       |EV [5] |
+  |       |       |       |       | V [5] | V [5] |       |
    ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |
+   ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       | D [5] |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 5
-Coins: 40
+Coins: 80
 Remaining vampires: 2
 Vampires on the board: 3
 Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       | V [2] |       | D [5] |
-   ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |       |EV [5] |
+  |       |       |       | V [5] |       | V [5] |       |
    ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |
+   ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       | D [5] |       |       |
    ------------------------------------------------------- 
 
 Command > 
-[DEBUG] Executing: 
-Number of cycles: 6
-Coins: 50
-Remaining vampires: 2
-Vampires on the board: 3
+[DEBUG] Executing: v e 4 1
+Number of cycles: 5
+Coins: 80
+Remaining vampires: 1
+Vampires on the board: 4
 Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       | V [1] |       | D [5] |
+  |       |       |       | V [5] |       | V [5] |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |EV [5] |       |
+  |       |       |       |       |EV [5] |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |       |       |
+  |       |       |       |       | D [5] |       |       |
+   ------------------------------------------------------- 
+
+Command > 
+[DEBUG] Executing: a 0 0
+Number of cycles: 6
+Coins: 40
+Remaining vampires: 1
+Vampires on the board: 4
+Dracula is alive
+
+   ------------------------------------------------------- 
+  | S [3] |       |       | V [4] | V [5] |       |       |
+   ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |EV [5] |       |       |
+   ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       | D [5] |       |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 7
-Coins: 50
+Coins: 40
 Remaining vampires: 1
-Vampires on the board: 3
+Vampires on the board: 4
 Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       | D [5] |       |
+  | S [3] |       | V [3] |       | V [5] |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |EV [5] |       |
+  |       |       |       |EV [5] |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |       |EV [5] |
+  |       |       |       | D [5] |       |       |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 8
 Coins: 50
-Remaining vampires: 0
+Remaining vampires: 1
 Vampires on the board: 4
 Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       | D [4] |       |
+  | S [3] |       | V [2] | V [5] |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |EV [5] |       |EV [5] |
+  |       |       |       |EV [5] |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |       |EV [5] |
+  |       |       |       | D [5] |       |       |       |
    ------------------------------------------------------- 
 
 Command > 
-[DEBUG] Executing: a 0 1 
+[DEBUG] Executing: 
 Number of cycles: 9
-Coins: 10
+Coins: 50
 Remaining vampires: 0
-Vampires on the board: 4
+Vampires on the board: 5
 Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       | D [3] |       |       |
+  | S [2] | V [1] |       | V [5] |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       |       |EV [4] |       |EV [5] |
+  |       |       |EV [5] |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |EV [5] |       |
+  |       |       | D [5] |       |       |       |EV [5] |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 10
-Coins: 20
+Coins: 50
 Remaining vampires: 0
 Vampires on the board: 4
 Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       | D [2] |       |       |
+  | S [1] |       | V [5] |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       |EV [3] |       |EV [5] |       |
+  |       |       |EV [5] |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |EV [5] |       |
+  |       |       | D [5] |       |       |       |EV [5] |
    ------------------------------------------------------- 
 
 Command > 
-[DEBUG] Executing: a 0 1 
-[ERROR]: Invalid position
-Command > 
-[DEBUG] Executing: 
+[DEBUG] Executing: g
 Number of cycles: 11
-Coins: 20
+Coins: 40
 Remaining vampires: 0
-Vampires on the board: 4
+Vampires on the board: 3
 Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       | D [1] |       |       |       |
+  | S [1] |       |       | V [4] |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       |EV [2] |       |EV [5] |       |
+  |       |       |       |EV [5] |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |EV [5] |       |       |
+  |       |       |       | D [5] |       |       |       |
    ------------------------------------------------------- 
 
+Command > 
+[DEBUG] Executing: save juegoHardSeed1
+Game successfully saved to file juegohardseed1.dat.
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 12
-Coins: 20
+Coins: 40
 Remaining vampires: 0
 Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
+  | S [1] |       | V [3] |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |EV [1] |       |EV [5] |       |       |
+  |       |       |EV [5] |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |EV [5] |       |       |
+  |       |       | D [5] |       |       |       |       |
    ------------------------------------------------------- 
+
+Command > 
+[DEBUG] Executing: v d 1 0
+[ERROR]: No more remaining vampires left
+[ERROR]: Failed to add this vampire
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 13
-Coins: 30
+Coins: 40
 Remaining vampires: 0
-Vampires on the board: 2
+Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
+  | S [1] |       | V [2] |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       |       |EV [5] |       |       |
+  |       |       |EV [5] |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |EV [4] |       |       |       |
+  |       |       | D [5] |       |       |       |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 14
-Coins: 30
+Coins: 50
 Remaining vampires: 0
-Vampires on the board: 2
+Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
+  |       | V [2] |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       |EV [4] |       |       |       |
+  |       |EV [5] |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |EV [4] |       |       |       |
+  |       | D [5] |       |       |       |       |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 15
-Coins: 30
+Coins: 60
 Remaining vampires: 0
-Vampires on the board: 2
+Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
+  |       | V [2] |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       |EV [3] |       |       |       |
+  |       |EV [5] |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |EV [4] |       |       |       |       |
+  |       | D [5] |       |       |       |       |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 16
-Coins: 30
+Coins: 70
 Remaining vampires: 0
-Vampires on the board: 2
+Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
+  | V [2] |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |EV [2] |       |       |       |       |
+  |EV [5] |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |EV [4] |       |       |       |       |
+  | D [5] |       |       |       |       |       |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 17
-Coins: 30
+Coins: 80
 Remaining vampires: 0
-Vampires on the board: 2
+Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
+  | V [2] |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |EV [1] |       |       |       |       |
+  |EV [5] |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  |       |EV [4] |       |       |       |       |       |
+  | D [5] |       |       |       |       |       |       |
    ------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
-Number of cycles: 18
-Coins: 40
+Number of cycles: 17
+Coins: 80
 Remaining vampires: 0
-Vampires on the board: 1
+Vampires on the board: 3
+Dracula is alive
 
    ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
+  |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
-  | S [2] |       |       |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- 
-  |       |EV [3] |       |       |       |       |       |
-   ------------------------------------------------------- 
-
-Command > 
-[DEBUG] Executing: 
-Number of cycles: 19
-Coins: 40
-Remaining vampires: 0
-Vampires on the board: 1
-
-   ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- 
-  | S [2] |       |       |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- 
-  |EV [3] |       |       |       |       |       |       |
-   ------------------------------------------------------- 
-
-Command > 
-[DEBUG] Executing: 
-Number of cycles: 20
-Coins: 40
-Remaining vampires: 0
-Vampires on the board: 1
-
-   ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- 
-  | S [2] |       |       |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- 
-  |EV [3] |       |       |       |       |       |       |
-   ------------------------------------------------------- 
-
-Command > 
-[DEBUG] Executing: 
-Number of cycles: 20
-Coins: 40
-Remaining vampires: 0
-Vampires on the board: 1
-
-   ------------------------------------------------------- 
-  | S [3] |       |       |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- 
-  | S [2] |       |       |       |       |       |       |
+  |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |
    ------------------------------------------------------- 
 
-[Game over] Vampires win!
+[GAME OVER] Vampires win!

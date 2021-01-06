@@ -1,5 +1,6 @@
 package control.commands;
 
+import exceptions.CommandParseException;
 import model.Game;
 
 public class HelpCommand extends Command {
@@ -17,7 +18,7 @@ public class HelpCommand extends Command {
 		return false;
 	}
 
-	public Command parse(String[] commandWords) {
+	public Command parse(String[] commandWords) throws CommandParseException {
 		return parseNoParamsCommand(commandWords);
 	}
 

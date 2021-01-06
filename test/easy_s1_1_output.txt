@@ -253,10 +253,10 @@ Dracula is alive
 
 Command > 
 [DEBUG] Executing: 
-Number of cycles: 14
+Number of cycles: 13
 Coins: 10
 Remaining vampires: 0
-Vampires on the board: -1
+Vampires on the board: 0
 
    --------------------------------------------------------------- 
   |       |       |       |       |       |       |       |       |
@@ -268,4 +268,4 @@ Vampires on the board: -1
   |       |       |       |       |       |       |       |       |
    --------------------------------------------------------------- 
 
-Command > 
+[GAME OVER] Player wins

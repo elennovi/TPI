@@ -21,9 +21,6 @@ public abstract class GameObject implements IAttack{
 	public int getCol() {
 		return c;
 	}
-	public int getHealth() {
-		return health;
-	}
 	public void decreaseLife(int damage) { 
 		health -= damage;
 	}
@@ -37,12 +34,14 @@ public abstract class GameObject implements IAttack{
 		++c;
 	}
 	public boolean isDead() {
-		return health <= 0;
+		return health == 0;
 	}
 	public String getPositionToString(int i, int j) {
 		return letter + " [" + health + "]";
 	}
+	public String commonInfo() {
+		return letter + ";" + c + ";" + r + ";"+ health;
+	}
 	public abstract void advance();
-	public abstract void deleteObjects();
-	public abstract boolean vampiresWins();
+	public abstract String serialize();
 }

@@ -1,5 +1,11 @@
 package model;
 import java.util.Random;
+
+import exceptions.CommandExecuteException;
+import exceptions.DraculaIsAliveException;
+import exceptions.InvalidPositionException;
+import exceptions.NoMoreVampiresException;
+import exceptions.NotEnoughCoinsException;
 import view.GamePrinter;
 import view.IPrintable;
 
@@ -15,12 +21,11 @@ public class Game implements IPrintable{
 	private static final int COST_ADD_COMMAND = 50;
 	private static final int COST_LIGHT_COMMAND = 50;
 	private static final int COST_GARLIC_COMMAND = 10;
-	private static final String ERROR = "[ERROR]: ";
-	private static final String notEnoughCoins= ERROR + "Not enough coins";
-    private static final String invalidPosition = ERROR + "Invalid position";
-    private static final String noMoreVampiresLeft = ERROR + "No more remaining vampires left";
-    private static final String draculaIsAlive = ERROR + "Dracula is alive";
-    private static final String invalidType = ERROR + "Invalid type";
+	private static final String notEnoughCoins= "Not enough coins";
+    private static final String invalidPositionMsg = "Unvalid position";
+    private static final String noMoreVampiresLeft = "No more remaining vampires left";
+    private static final String draculaIsAlive = "Dracula is alive";
+    private static final String draculaIsAlreadyAlive = "Dracula is already on board";
 	
 	public Game(long seed, Level level) {
 		rand = new Random(seed);
@@ -65,7 +70,7 @@ public class Game implements IPrintable{
 				"Remaining vampires: " + stringRemainingVampires() + "\n" + 
 				"Vampires on the board: " + stringVampiresOnBoard() + "\n";
 		if (Dracula.isAlive())
-			message += "Dracula is alive" + "\n";
+			message += draculaIsAlive + "\n";
 		return message;
 	}
 	public void addBloodBank(int row, int col, int cost) {
@@ -77,37 +82,43 @@ public class Game implements IPrintable{
 			decreasePlayerCoins(cost);
 	}
 	public void addRandomVampires() { 
-		String type[] = {"", "d", "e"};
-		for (String t: type)
-			if (t != "d" || (t == "d" && !Dracula.isAlive()))
-				if (remainingVampires() && vampireFrequency()){
-					int randRow = rand.nextInt(level.getRows());
-					int randCol = level.getCols() - 1;
-					if(!objects.somethingInPosition(randRow, randCol))
-						addVampire(randRow, randCol, t);
-				}
+		// Vampiro normal
+		if (remainingVampires() && vampireFrequency()){
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				objects.addObject(new Vampire(randRow, randCol, this));
+		}
+		// Dracula
+		if (!Dracula.isAlive() && remainingVampires() && vampireFrequency()) {
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				objects.addObject(new Dracula(randRow, randCol, this));
+		}
+		// Vampiro Explosivo
+		if (remainingVampires() && vampireFrequency()){
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				objects.addObject(new ExplosiveVampire(randRow, randCol, this));
+		}
 	}
-	public boolean addVampire(int row, int col, String type) {
+	public void addVampire(int row, int col, String type) throws CommandExecuteException {
 		switch(type) {
 		case "d":
 			if (!Dracula.isAlive())
 				objects.addObject(new Dracula(row, col, this));
 			else {
-				System.out.println(draculaIsAlive);
-				return false;
+				throw new DraculaIsAliveException("[ERROR]: " + draculaIsAlreadyAlive);
 			}
 			break;
 		case "e":
 			objects.addObject(new ExplosiveVampire(row, col, this));
 			break;
-		case "": 
+		default: 
 			objects.addObject(new Vampire(row, col, this));
-			break;
-		default:
-			System.out.println(invalidType);
-			return false;
 		}
-		return true;
 	}
 	public boolean remainingVampires() {
 		return (Vampire.getNumVampires() + Vampire.getDeadVampires() < level.getNumberOfVampires());
@@ -124,73 +135,67 @@ public class Game implements IPrintable{
 		if (!isFinished())
 			addCycle();
 	}
-	public boolean addVampireCommand(String type, int row, int col) {
+	public void addVampireCommand(String type, int row, int col) throws CommandExecuteException {
 		if(inPlane(row, col) && !somethingInPosition(row, col)) {
-            if(remainingVampires()) {
-                if (addVampire(row, col, type)) return true;
-            }
-            else System.out.println(noMoreVampiresLeft);
+            if(remainingVampires())
+            	addVampire(row, col, type);
+            else throw new NoMoreVampiresException("[ERROR]: " + noMoreVampiresLeft);
         }
-        else System.out.println(invalidPosition);    
-        return false;
+        else throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);
 	}
-	public boolean addSlayerCommand(int row, int col) {
+	public void addSlayerCommand(int row, int col) throws CommandExecuteException { 
 		if(!inPlane(row, col) || isInLastCol(col) || somethingInPosition(row, col))
-			System.out.println(invalidPosition);
+			throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);
 		else if(haveEnoughMoney(COST_ADD_COMMAND)) {
 				addSlayer(row, col, COST_ADD_COMMAND);
 				update();
-				return true;
 		}
-		else System.out.println(notEnoughCoins);
-		return false;
+		else
+			throw new NotEnoughCoinsException("[ERROR]: Defender cost is " + COST_ADD_COMMAND + ": " + notEnoughCoins);
 	}
-	public boolean lightFlashCommand() {
+	public void lightFlashCommand() throws CommandExecuteException {
 		if(haveEnoughMoney(COST_LIGHT_COMMAND)) {
 			killAllVampires();
 			decreasePlayerCoins(COST_LIGHT_COMMAND);
 			update();
-			return true;
 		}
-		else System.out.println(notEnoughCoins);
-		return false;
+		else throw new NotEnoughCoinsException("[ERROR]: Light Flash cost is " + COST_LIGHT_COMMAND + ": " + notEnoughCoins);
 	}
-	public boolean addBloodBankCommand(int row, int col, int cost) {
+	public void addBloodBankCommand(int row, int col, int cost) throws CommandExecuteException {
 		if(inPlane(row, col) && !somethingInPosition(row, col) && !isInLastCol(col)) {
 			if (haveEnoughMoney(cost)) {
 				addBloodBank(row, col, cost);
 				update();
-				return true;
 			}
-			else System.out.println(notEnoughCoins);
+			else throw new NotEnoughCoinsException("[ERROR]: Defender cost is " + cost + ": " + notEnoughCoins);
 		}
-		else System.out.println(invalidPosition);	
-		return false;
+		else throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);	
 	}
-	public boolean garlicPushCommand() {
+	public void garlicPushCommand() throws CommandExecuteException {
 		if (haveEnoughMoney(COST_GARLIC_COMMAND)) {
 			pushVampires();
 			decreasePlayerCoins(COST_GARLIC_COMMAND);
 			update();
-			return true;
 		}
-		else System.out.println(notEnoughCoins);
-		return false;
+		else throw new NotEnoughCoinsException("[ERROR]: Garlic Push cost is " + COST_GARLIC_COMMAND + ": " + notEnoughCoins);
+	}
+	public String serializeCommand() {
+		return ("Cycles: " + cycles + "\n" +
+				"Coins: " + player.getCoins() + "\n" +
+				"Level: " + level.getName().toUpperCase() + "\n" +
+				"Remaining Vampires: " + stringRemainingVampires() + "\n" +
+				"Vampires on Board: " + stringVampiresOnBoard() + "\n\n" +
+				objects.serialize() + "\n");
 	}
 	public String getWinnerMessage() {
 		if(Vampire.Wins()) return "Vampires win!";
 		else if(Vampire.Loose()) return "Player wins";
 		return "Nobody wins...";
 	}
-	public boolean isAPairCycle() { // Devuelve un valor indicando si
-		// el ciclo en el que se encuentra el  juego es par o impar
-		return cycles % 2 == 0;
-	}
 	public boolean somethingInPosition(int r,int c) {
 		return objects.somethingInPosition(r, c);
 	}
 	public void checkAnyWinner() {
-		objects.vampiresWins();
 		if (Vampire.getDeadVampires() == getNumVampires())
 			Vampire.setLoose();
 	}
@@ -227,5 +232,6 @@ public class Game implements IPrintable{
 	public void decreasePlayerCoins(int cost) {
 		player.decreaseCoins(cost);
 	}
+	
 	
 }

@@ -1,5 +1,6 @@
 package control.commands;
 
+import exceptions.CommandParseException;
 import model.Game;
 
 public class SuperCoinsCommand extends Command {
@@ -18,7 +19,7 @@ public class SuperCoinsCommand extends Command {
 		return true;
 	}
 
-	public Command parse(String[] commandWords) {
+	public Command parse(String[] commandWords) throws CommandParseException {
 		return parseNoParamsCommand(commandWords);
 	}
 

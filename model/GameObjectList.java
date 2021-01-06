@@ -16,11 +16,6 @@ public class GameObjectList {
 	public void addObject(GameObject object) { 
 		gameObjects.add(object);
 	}
-	public void vampiresWins() {
-		for(GameObject o: gameObjects)
-			if (o.vampiresWins())
-				break;
-	}
 	public void advance() {
 		for(GameObject o: gameObjects)
 			o.advance();
@@ -29,28 +24,28 @@ public class GameObjectList {
 		int i = 0;
 		while(i < gameObjects.size()) {
 			if(gameObjects.get(i).isDead()) {
-				gameObjects.get(i).deleteObjects(); // contabilizamos los muertos
 				gameObjects.remove(i);
 			}
-			else
-				i++;
+			else i++;
 		}
 	}
 	public void attack() {
 		for (IAttack i: gameObjects)
 			i.attack();
 	}
-	public IAttack getAttackableInPosition(int row, int i) {
-		for (GameObject object: gameObjects) 
-			if (object.isInPosition(row, i))
-				return object;
-		return null;
+	public IAttack getAttackableInPosition(int i, int j) {
+		return getObjectInPosition(i, j);
 	}
 	public String getPositionToString(int i, int j) {
+		if (getObjectInPosition(i, j) != null)
+			return getObjectInPosition(i, j).getPositionToString(i, j);
+		else return "";
+	}
+	private GameObject getObjectInPosition(int i, int j) {
 		for (GameObject o: gameObjects)
 			if (o.isInPosition(i, j))
-				return o.getPositionToString(i, j);
-		return "";
+				return o;
+		return null;
 	}
 	public void pushVampires() {
 		for(IAttack o: gameObjects)
@@ -59,5 +54,11 @@ public class GameObjectList {
 	public void killAllVampires() {
 		for(IAttack o: gameObjects)
 			o.receiveLightFlash();
+	}
+	public String serialize() {
+		String listInfo = "Game Object List: \n";
+		for(GameObject o: gameObjects)
+			listInfo += (o.serialize() + "\n");
+		return listInfo;
 	}
 }

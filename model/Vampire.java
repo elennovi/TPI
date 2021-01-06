@@ -2,9 +2,8 @@ package model;
 
 public class Vampire extends GameObject{
 	private Game game;
-	private boolean cyclePair; // Indica si el ciclo de aparición del vampiro
-	// es par o impar, de esta forma podremos saber cuándo se mueven
-	private int initCycle;
+	private int moveCycle;
+	private static final int INITCYCLE = 1;
 	private static boolean wins = false;
 	private static boolean loose = false;
 	private static int numVampires = 0;
@@ -13,43 +12,34 @@ public class Vampire extends GameObject{
 	private static final int HARM = 1;
 	private static final String GENERICLETTER = "V";
 	
-	public Vampire(int r, int c, Game game) { // Inicializa losa atributos
+	public Vampire(int r, int c, Game game) {
 		super(r, c, HEALTH, GENERICLETTER);
-		cyclePair = game.isAPairCycle(); // Comprobamos cual es la paridadd del ciclo
+		moveCycle = INITCYCLE;
 		this.game = game;
 		++numVampires;
-		initCycle = game.getCycles();
 	} // Es el constructor genérico de vampiro (V[vida])
 	
 	public Vampire(int r, int c, Game game, String letter) { 
 		super(r, c, HEALTH, letter);
-		cyclePair = game.isAPairCycle(); // Comprobamos cual es la paridadd del ciclo
+		moveCycle = INITCYCLE;
 		this.game = game;
 		++numVampires;
-		initCycle = game.getCycles();
 	} // Es el constructor que utilizaremos para los tipos de vampiros
 	
-	public void advance() { // Un vampiro avanza solo cuando no tiene ningún
-		// slayer ni ningún otro vampiro delante y además el ciclo le permite
-		// avanzar 
-		if (!game.somethingInPosition(getRow(), getCol() - 1) && canAdvanceCycle())
-			decreaseCol();
-		else if (!cycleDistinctGameCycle())
-			changeCycle();// si tiene algo delante entonces cambiaremos su
-		// ciclo
-		// game.somethingInPosition(getRow(), getCol() - 1) || 
+	public void advance() { 
+		--moveCycle;
+		if (!game.somethingInPosition(getRow(), getCol() - 1) && canAdvanceCycle()) {
+			decreaseCol(); 
+			moveCycle = INITCYCLE;
+		}
+		if (hasArrived())
+			Vampire.wins = true;
 	}
-	
-	public void changeCycle() {
-		cyclePair = !cyclePair;
+	private boolean isGoingToMove() {
+		return moveCycle == 0 || canAdvanceCycle();
 	}
-	public boolean canAdvanceCycle() { // Puede avanzar si la paridad de ciclo
-		// de creación del vampiro es igual que la creación de la paridad del
-		// ciclo en el que se encuentra ell juego
-		return cyclePair == game.isAPairCycle() && cycleDistinctGameCycle();
-	}
-	public boolean cycleDistinctGameCycle() {
-		return initCycle != game.getCycles();
+	private boolean canAdvanceCycle() {
+		return moveCycle < 0;
 	}
 	private boolean hasArrived() {
 		return getCol() == -1;
@@ -75,7 +65,7 @@ public class Vampire extends GameObject{
 	public static void setNumDead() {
 		deadVampires = 0;
 	}
-	public void deleteObjects() {
+	public void countVampires() {
 		--numVampires;
 		++deadVampires;
 	}
@@ -87,30 +77,32 @@ public class Vampire extends GameObject{
 		}
 	}
 	public boolean receiveSlayerAttack(int damage) {
-		decreaseLife(damage);
-		return true;
-	}
-	public boolean vampiresWins() {
-		if (hasArrived()) {
-			Vampire.wins = true;
-			return true;
+		if (!isDead()) {
+			decreaseLife(damage);
+			if (isDead())
+				countVampires();
 		}
-		else 
-			return false;
+		return true;
 	}
 	public boolean receiveGarlicPush() {
 		// si hay algo en esa posición no puede retroceder
+		if (isGoingToMove())
+			++moveCycle;
 		if (!game.somethingInPosition(getRow(), getCol() + 1))
 			increaseCol();
-		if (canAdvanceCycle())
-			changeCycle();
 		if (!game.inPlane(getRow(), getCol())) { // si no está en el plano
 			setDeadObject(); // lo ponemos la vida a 0 porque no está en el tablero
 		}
+		if (isDead())
+			countVampires();
 		return true;
 	}
 	public boolean receiveLightFlash() {
 		setDeadObject();
+		countVampires();
 		return true;
+	}
+	public String serialize() {
+		return super.commonInfo() + ";" + moveCycle;
 	}
 }

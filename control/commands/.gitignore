@@ -11,3 +11,7 @@
 /LightFlashCommand.class
 /AddBloodBank.class
 /AddBloodBankCommand.class
+/Serialize.class
+/SerializeCommand.class
+/SafeCommand.class
+/SaveCommand.class

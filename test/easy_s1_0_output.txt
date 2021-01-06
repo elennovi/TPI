@@ -33,9 +33,9 @@ Vampires on the board: 1
    --------------------------------------------------------------- 
 
 Command > 
-[DEBUG] Executing: 
+[DEBUG] Executing: bank 5 2 10
 Number of cycles: 2
-Coins: 70
+Coins: 61
 Remaining vampires: 2
 Vampires on the board: 1
 
@@ -44,7 +44,7 @@ Vampires on the board: 1
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |       |       |EV [5] |
+  |       |       |       |       |       |B [10] |       |EV [5] |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    --------------------------------------------------------------- 
@@ -52,7 +52,7 @@ Vampires on the board: 1
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 3
-Coins: 80
+Coins: 72
 Remaining vampires: 2
 Vampires on the board: 1
 
@@ -67,9 +67,13 @@ Vampires on the board: 1
    --------------------------------------------------------------- 
 
 Command > 
+[DEBUG] Executing: a v 2
+[ERROR]: Unvalid argument for add slayer command, number expected: [a]dd <x> <y>
+
+Command > 
 [DEBUG] Executing: a 0 2
 Number of cycles: 4
-Coins: 30
+Coins: 22
 Remaining vampires: 2
 Vampires on the board: 1
 
@@ -84,14 +88,46 @@ Vampires on the board: 1
    --------------------------------------------------------------- 
 
 Command > 
-[DEBUG] Executing: a 3 3
-[ERROR]: Defender cost is 50: Not enough coins
-[ERROR]: Failed to add slayer
+[DEBUG] Executing: coins 60
+[ERROR]: Command coins :Incorrect number of arguments
+
+Command > 
+[DEBUG] Executing: help
+Available commands:
+[a]dd <x> <y>: add a slayer in position x, y
+[h]elp: show this help
+[r]eset: reset game
+[e]xit: exit game
+[n]one | []: update
+[g]arlic : pushes back vampires
+[l]ight: kills all the vampires
+[b]ank <x> <y> <z>: add a blood bank with cost z in position x, y
+[c]oins: add 1000 coins
+[v]ampire [<type>] <x> <y>. Type = {""|"D"|"E"}: add a vampire in position x, y
+[S]ave <filename>: Save the state of the game to a file.
+Seriali[z]e: Serializes the board.
+
+Command > 
+[DEBUG] Executing: coins
+Number of cycles: 4
+Coins: 1022
+Remaining vampires: 2
+Vampires on the board: 1
+
+   --------------------------------------------------------------- 
+  |       |       |       |       |       |       |       |       |
+   ------- ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       |       |       |       |
+   ------- ------- ------- ------- ------- ------- ------- ------- 
+  | S [3] |       |       |       |       |       |EV [4] |       |
+   ------- ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       |       |       |       |
+   --------------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 5
-Coins: 40
+Coins: 1032
 Remaining vampires: 2
 Vampires on the board: 1
 
@@ -108,7 +144,7 @@ Vampires on the board: 1
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 6
-Coins: 40
+Coins: 1032
 Remaining vampires: 2
 Vampires on the board: 1
 
@@ -125,7 +161,7 @@ Vampires on the board: 1
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 7
-Coins: 40
+Coins: 1032
 Remaining vampires: 1
 Vampires on the board: 2
 
@@ -142,7 +178,7 @@ Vampires on the board: 2
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 8
-Coins: 40
+Coins: 1032
 Remaining vampires: 1
 Vampires on the board: 1
 
@@ -157,60 +193,92 @@ Vampires on the board: 1
    --------------------------------------------------------------- 
 
 Command > 
+[DEBUG] Executing: v dracula 7 0
+[ERROR]: Unvalid type: [v]ampire [<type>] <x> <y>. Type = {""|"D"|"E"}
+
+Command > 
+[DEBUG] Executing: v d 7 0
+Number of cycles: 8
+Coins: 1032
+Remaining vampires: 0
+Vampires on the board: 2
+Dracula is alive
+
+   --------------------------------------------------------------- 
+  |       |       |       |       |       |       |       | D [5] |
+   ------- ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       |       |       |       |
+   ------- ------- ------- ------- ------- ------- ------- ------- 
+  | S [3] |       |       |       |       |       |       | V [5] |
+   ------- ------- ------- ------- ------- ------- ------- ------- 
+  |       |       |       |       |       |       |       |       |
+   --------------------------------------------------------------- 
+
+Command > 
 [DEBUG] Executing: 
 Number of cycles: 9
-Coins: 50
+Coins: 1042
 Remaining vampires: 0
 Vampires on the board: 2
 Dracula is alive
 
    --------------------------------------------------------------- 
-  |       |       |       |       |       |       |       |       |
+  |       |       |       |       |       |       |       | D [5] |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       |       |       |       | V [4] | D [5] |
+  | S [3] |       |       |       |       |       | V [4] |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    --------------------------------------------------------------- 
 
 Command > 
-[DEBUG] Executing: a 3 -3
-[ERROR]: Position (3, -3): Unvalid position
-[ERROR]: Failed to add slayer
-
-Command > 
-[DEBUG] Executing: a 3 2
+[DEBUG] Executing: g
 Number of cycles: 10
-Coins: 0
+Coins: 1032
 Remaining vampires: 0
-Vampires on the board: 2
-Dracula is alive
+Vampires on the board: 1
 
    --------------------------------------------------------------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       | S [3] |       |       | V [2] | D [5] |
+  | S [3] |       |       |       |       |       |       | V [3] |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    --------------------------------------------------------------- 
+
+Command > 
+[DEBUG] Executing: z game
+[ERROR]: Command serialize :Incorrect number of arguments
+
+Command > 
+[DEBUG] Executing: z
+Cycles: 10
+Coins: 1032
+Level: EASY
+Remaining Vampires: 0
+Vampires on Board: 1
+
+Game Object List: 
+S;0;2;3
+V;7;2;3;0
+
 
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 11
-Coins: 0
+Coins: 1032
 Remaining vampires: 0
 Vampires on the board: 1
-Dracula is alive
 
    --------------------------------------------------------------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       | S [3] |       |       | D [5] |       |
+  | S [3] |       |       |       |       |       | V [2] |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    --------------------------------------------------------------- 
@@ -218,54 +286,35 @@ Dracula is alive
 Command > 
 [DEBUG] Executing: 
 Number of cycles: 12
-Coins: 0
+Coins: 1032
 Remaining vampires: 0
 Vampires on the board: 1
-Dracula is alive
 
    --------------------------------------------------------------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       | S [3] |       |       | D [3] |       |
+  | S [3] |       |       |       |       |       | V [1] |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    --------------------------------------------------------------- 
 
 Command > 
 [DEBUG] Executing: 
-Number of cycles: 13
-Coins: 0
+Number of cycles: 12
+Coins: 1032
 Remaining vampires: 0
-Vampires on the board: 1
-Dracula is alive
+Vampires on the board: 0
 
    --------------------------------------------------------------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       | S [3] |       | D [1] |       |       |
+  | S [3] |       |       |       |       |       |       |       |
    ------- ------- ------- ------- ------- ------- ------- ------- 
   |       |       |       |       |       |       |       |       |
    --------------------------------------------------------------- 
 
-Command > 
-[DEBUG] Executing: 
-Number of cycles: 14
-Coins: 10
-Remaining vampires: 0
-Vampires on the board: -1
-
-   --------------------------------------------------------------- 
-  |       |       |       |       |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- ------- 
-  | S [3] |       |       | S [3] |       |       |       |       |
-   ------- ------- ------- ------- ------- ------- ------- ------- 
-  |       |       |       |       |       |       |       |       |
-   --------------------------------------------------------------- 
-
-Command > 
+[GAME OVER] Player wins

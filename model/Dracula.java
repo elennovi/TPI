@@ -19,12 +19,18 @@ public class Dracula extends Vampire{
 	public static boolean isAlive() {
 		return alive;
 	}
-	public boolean receiveLightFlash() {
-		return false;
+	public boolean receiveLightFlash() {return false;}
+	public boolean receiveGarlicPush() {
+		super.receiveGarlicPush();
+		if (isDead())
+			setDeadDracula();
+		return true;
 	}
-	public void deleteObjects() {
-		setDeadDracula();
-		super.deleteObjects();
+	public boolean receiveSlayerAttack(int damage) {
+		super.receiveSlayerAttack(damage);
+		if (isDead())
+			setDeadDracula();
+		return true;
 	}
 	public static void setDeadDracula() {
 		alive = false;

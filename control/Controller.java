@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 import control.commands.Command;
 import control.commands.CommandGenerator;
+import exceptions.GameException;
 import model.Game;
 
 public class Controller {
@@ -32,15 +33,17 @@ public class Controller {
 			  String s = scanner.nextLine();
 			  String[] parameters = s.toLowerCase().trim().split(" ");
 			  System.out.println("[DEBUG] Executing: " + s);
-		      Command command = CommandGenerator.parseCommand(parameters);
-		      if (command != null)
-	    	  		refreshDisplay = command.execute(game);
-		       
-		      else
-	    	   		System.out.println(unknownCommandMsg);
+			  try {
+			      Command command = CommandGenerator.parseCommand(parameters);
+			      refreshDisplay = command.execute(game);
+			  }
+			  catch (GameException ex) {
+				  System.out.format(ex.getMessage() + "%n%n");
+				  refreshDisplay = false;
+			  }
 		}
     	if (refreshDisplay) printGame();
-			System.out.println ("[Game over] " + game.getWinnerMessage());
+			System.out.println ("[GAME OVER] " + game.getWinnerMessage());
 
     }
 

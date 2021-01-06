@@ -1,38 +1,22 @@
 
+v 6 o
+v 6 0
+v 5 0
+v d 6 2
 
+
+
+
+v e 4 1
 a 0 0
 
 
 
 
+g
+save juegoHardSeed1
 
-a 0 1 
-
-a 0 1 
-
-
-
-
-
-
-
-
-
-
-
-a 0 2
-
-
-
-
-
-
-a 1 1
-
-
-
-
-
+v d 1 0
 
 
 

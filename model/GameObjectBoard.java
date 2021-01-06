@@ -28,14 +28,14 @@ public class GameObjectBoard {
 	public String getPositionToString(int i, int j) {
 		return gameObjects.getPositionToString(i, j);
 	}
-	public void vampiresWins() {
-		gameObjects.vampiresWins();
-	}
 	public void pushVampires() {
 		gameObjects.pushVampires();
 	}
 	public void killAllVampires() {
 		gameObjects.killAllVampires();
+	}
+	public String serialize() {
+		return gameObjects.serialize();
 	}
 }
 

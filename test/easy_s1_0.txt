@@ -1,0 +1,21 @@
+
+bank 5 2 10
+
+a v 2
+a 0 2
+coins 60
+help
+coins
+
+
+
+
+v dracula 7 0
+v d 7 0
+
+g
+z game
+z
+
+
+

@@ -1,10 +1,15 @@
 package control.commands;
 
+import exceptions.CommandParseException;
 import model.Game;
 
 public class ExitCommand extends Command {
+	private static final String name = "exit";
+	private static final String shortcut = "e";
+	private static final String details = "[e]xit";
+	private static final String help = "exit game";
 	public ExitCommand() {
-		super("exit", "e", "[e]xit", "exit game");
+		super(name, shortcut, details, help);
 	}
 
 	public boolean execute(Game game) {
@@ -12,7 +17,7 @@ public class ExitCommand extends Command {
 		return false;
 	}
 
-	public Command parse(String[] commandWords) {
+	public Command parse(String[] commandWords) throws CommandParseException {
 		return parseNoParamsCommand(commandWords);
 	}
 }

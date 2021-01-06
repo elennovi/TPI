@@ -1,0 +1,8 @@
+/GameException.class
+/CommandParseException.class
+/CommandExecuteException.class
+/NumberFormatException.class
+/InvalidPositionException.class
+/NotEnoughCoinsException.class
+/DraculaIsAliveException.class
+/NoMoreVampiresException.class
