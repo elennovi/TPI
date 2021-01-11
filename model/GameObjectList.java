@@ -41,12 +41,6 @@ public class GameObjectList {
 			return getObjectInPosition(i, j).getPositionToString(i, j);
 		else return "";
 	}
-	private GameObject getObjectInPosition(int i, int j) {
-		for (GameObject o: gameObjects)
-			if (o.isInPosition(i, j))
-				return o;
-		return null;
-	}
 	public void pushVampires() {
 		for(IAttack o: gameObjects)
 			o.receiveGarlicPush();
@@ -60,5 +54,13 @@ public class GameObjectList {
 		for(GameObject o: gameObjects)
 			listInfo += (o.serialize() + "\n");
 		return listInfo;
+	}
+	
+	//FUNCIONES PRIVADAS:
+	private GameObject getObjectInPosition(int i, int j) {
+		for (GameObject o: gameObjects)
+			if (o.isInPosition(i, j))
+				return o;
+		return null;
 	}
 }

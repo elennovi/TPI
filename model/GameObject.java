@@ -39,9 +39,8 @@ public abstract class GameObject implements IAttack{
 	public String getPositionToString(int i, int j) {
 		return letter + " [" + health + "]";
 	}
-	public String commonInfo() {
+	public String serialize() {
 		return letter + ";" + c + ";" + r + ";"+ health;
 	}
 	public abstract void advance();
-	public abstract String serialize();
 }

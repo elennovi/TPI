@@ -30,8 +30,4 @@ public class Slayer extends GameObject{
 		return true;
 	}
 	public void advance() {} // Los slayers no se mueven
-	public void deleteObjects() {} // Los slayers no necesitan ser contabilizados
-	public String serialize() {
-		return super.commonInfo();
-	}
 }

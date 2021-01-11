@@ -6,21 +6,18 @@ public class GameObjectBoard {
 	
 	public GameObjectBoard(Level level) { 
 		gameObjects = new GameObjectList(level);
-		Vampire.setNumDead();
-		Vampire.setNumVampires();
+		Vampire.initGameObjectBoard();
 	}
-	public boolean somethingInPosition(int r, int c) { // Devuelve un booleano
-		// indicando si hay algún objeto en una posición dada
+	public boolean somethingInPosition(int r, int c) { 
 		return gameObjects.isInPosition(r, c);
 	}
 	public void addObject(GameObject o) {
 		gameObjects.addObject(o);
 	}
-	public void update(Random rand) { // Se actualiza el tablero
-		gameObjects.advance(); // los objetos que tengan que moverse avanzan
+	public void update(Random rand) {
+		gameObjects.advance(); 
 		gameObjects.attack();
-		gameObjects.removeDead(); // Se eliminan los cadaveres de los slayers a los que
-		// han matado los vampiros;
+		gameObjects.removeDead(); 
 	}
 	public IAttack getAttackableInPosition(int row, int i) {
 		return gameObjects.getAttackableInPosition(row, i);
@@ -33,6 +30,7 @@ public class GameObjectBoard {
 	}
 	public void killAllVampires() {
 		gameObjects.killAllVampires();
+		gameObjects.removeDead();
 	}
 	public String serialize() {
 		return gameObjects.serialize();

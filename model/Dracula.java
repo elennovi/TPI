@@ -7,7 +7,7 @@ public class Dracula extends Vampire{
 	public Dracula(int r, int c, Game game) {
 		super(r, c, game, DRACULALETTER);
 		this.game = game;
-		alive = true;
+		initDracula();
 	}
 	public void attack() {
 		if (!isDead()) {
@@ -19,20 +19,27 @@ public class Dracula extends Vampire{
 	public static boolean isAlive() {
 		return alive;
 	}
-	public boolean receiveLightFlash() {return false;}
 	public boolean receiveGarlicPush() {
 		super.receiveGarlicPush();
-		if (isDead())
-			setDeadDracula();
+		deadDracula();
 		return true;
 	}
 	public boolean receiveSlayerAttack(int damage) {
 		super.receiveSlayerAttack(damage);
-		if (isDead())
-			setDeadDracula();
+		deadDracula();
 		return true;
 	}
 	public static void setDeadDracula() {
 		alive = false;
+	}
+	public boolean receiveLightFlash() {return false;}
+	
+	//FUNCIONES PRIVADAS:
+	private void initDracula() {
+		alive = true;
+	}
+	private void deadDracula() {
+		if (isDead())
+			setDeadDracula();
 	}
 }

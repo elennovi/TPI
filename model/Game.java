@@ -21,16 +21,12 @@ public class Game implements IPrintable{
 	private static final int COST_ADD_COMMAND = 50;
 	private static final int COST_LIGHT_COMMAND = 50;
 	private static final int COST_GARLIC_COMMAND = 10;
-	private static final String notEnoughCoins= "Not enough coins";
-    private static final String invalidPositionMsg = "Unvalid position";
-    private static final String noMoreVampiresLeft = "No more remaining vampires left";
     private static final String draculaIsAlive = "Dracula is alive";
-    private static final String draculaIsAlreadyAlive = "Dracula is already on board";
 	
 	public Game(long seed, Level level) {
 		rand = new Random(seed);
-		this.level = level;
 		printer = new GamePrinter(this, level.getCols(), level.getRows());
+		this.level = level;
 		initGame();
 	}
 	public void initGame() {
@@ -40,11 +36,8 @@ public class Game implements IPrintable{
 		Exit = false;
 		Dracula.setDeadDracula();
 	}
-	public void addCycle() {
-		++cycles;
-	}
 	public boolean isFinished() {
-		return Vampire.Wins() || Vampire.Loose() || Exit;
+		return Vampire.Wins() || Vampire.Lose() || Exit;
 	}
 	public int Rows() {
 		return level.getRows();
@@ -57,12 +50,6 @@ public class Game implements IPrintable{
 	}
 	public String toString() {
 		return printer.toString();
-	}
-	public String stringRemainingVampires() {
-		return Integer.toString(level.getNumberOfVampires() - (Vampire.getNumVampires() + Vampire.getDeadVampires()));
-	}
-	public String stringVampiresOnBoard() {
-		return Integer.toString(Vampire.getNumVampires());
 	}
 	public String getInfo() {
 		String message = "Number of cycles: " + cycles + "\n" + 
@@ -82,36 +69,16 @@ public class Game implements IPrintable{
 			decreasePlayerCoins(cost);
 	}
 	public void addRandomVampires() { 
-		// Vampiro normal
-		if (remainingVampires() && vampireFrequency()){
-			int randRow = rand.nextInt(level.getRows());
-			int randCol = level.getCols() - 1;
-			if(!objects.somethingInPosition(randRow, randCol))
-				objects.addObject(new Vampire(randRow, randCol, this));
-		}
-		// Dracula
-		if (!Dracula.isAlive() && remainingVampires() && vampireFrequency()) {
-			int randRow = rand.nextInt(level.getRows());
-			int randCol = level.getCols() - 1;
-			if(!objects.somethingInPosition(randRow, randCol))
-				objects.addObject(new Dracula(randRow, randCol, this));
-		}
-		// Vampiro Explosivo
-		if (remainingVampires() && vampireFrequency()){
-			int randRow = rand.nextInt(level.getRows());
-			int randCol = level.getCols() - 1;
-			if(!objects.somethingInPosition(randRow, randCol))
-				objects.addObject(new ExplosiveVampire(randRow, randCol, this));
-		}
+		addRandomVampire();
+		addRandomDracula();
+		addRandomExplosive();
 	}
 	public void addVampire(int row, int col, String type) throws CommandExecuteException {
 		switch(type) {
 		case "d":
 			if (!Dracula.isAlive())
 				objects.addObject(new Dracula(row, col, this));
-			else {
-				throw new DraculaIsAliveException("[ERROR]: " + draculaIsAlreadyAlive);
-			}
+			else throw new DraculaIsAliveException();
 			break;
 		case "e":
 			objects.addObject(new ExplosiveVampire(row, col, this));
@@ -127,31 +94,31 @@ public class Game implements IPrintable{
 		return rand.nextDouble() < level.getVampireFrequency();
 	}
 	public void update() {
-		if(rand.nextFloat() > 0.5)
+		if(rand.nextFloat() > 0.5) 
 			player.addCoins(NUM_COINS_PER_CYCLE);
 		objects.update(rand);
 		addRandomVampires(); 
-		checkAnyWinner();
-		if (!isFinished())
+		checkVampiresLose();
+		if (!isFinished()) 
 			addCycle();
 	}
 	public void addVampireCommand(String type, int row, int col) throws CommandExecuteException {
 		if(inPlane(row, col) && !somethingInPosition(row, col)) {
             if(remainingVampires())
             	addVampire(row, col, type);
-            else throw new NoMoreVampiresException("[ERROR]: " + noMoreVampiresLeft);
+            else throw new NoMoreVampiresException();
         }
-        else throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);
+        else throw new InvalidPositionException(col, row);
 	}
 	public void addSlayerCommand(int row, int col) throws CommandExecuteException { 
 		if(!inPlane(row, col) || isInLastCol(col) || somethingInPosition(row, col))
-			throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);
+			throw new InvalidPositionException(col, row);
 		else if(haveEnoughMoney(COST_ADD_COMMAND)) {
 				addSlayer(row, col, COST_ADD_COMMAND);
 				update();
 		}
 		else
-			throw new NotEnoughCoinsException("[ERROR]: Defender cost is " + COST_ADD_COMMAND + ": " + notEnoughCoins);
+			throw new NotEnoughCoinsException("Defender", COST_ADD_COMMAND);
 	}
 	public void lightFlashCommand() throws CommandExecuteException {
 		if(haveEnoughMoney(COST_LIGHT_COMMAND)) {
@@ -159,7 +126,7 @@ public class Game implements IPrintable{
 			decreasePlayerCoins(COST_LIGHT_COMMAND);
 			update();
 		}
-		else throw new NotEnoughCoinsException("[ERROR]: Light Flash cost is " + COST_LIGHT_COMMAND + ": " + notEnoughCoins);
+		else throw new NotEnoughCoinsException("Light Flash", COST_LIGHT_COMMAND);
 	}
 	public void addBloodBankCommand(int row, int col, int cost) throws CommandExecuteException {
 		if(inPlane(row, col) && !somethingInPosition(row, col) && !isInLastCol(col)) {
@@ -167,9 +134,9 @@ public class Game implements IPrintable{
 				addBloodBank(row, col, cost);
 				update();
 			}
-			else throw new NotEnoughCoinsException("[ERROR]: Defender cost is " + cost + ": " + notEnoughCoins);
+			else throw new NotEnoughCoinsException("Defender", cost);
 		}
-		else throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);	
+		else throw new InvalidPositionException(col, row);	
 	}
 	public void garlicPushCommand() throws CommandExecuteException {
 		if (haveEnoughMoney(COST_GARLIC_COMMAND)) {
@@ -177,7 +144,7 @@ public class Game implements IPrintable{
 			decreasePlayerCoins(COST_GARLIC_COMMAND);
 			update();
 		}
-		else throw new NotEnoughCoinsException("[ERROR]: Garlic Push cost is " + COST_GARLIC_COMMAND + ": " + notEnoughCoins);
+		else throw new NotEnoughCoinsException("Garlic Push", COST_GARLIC_COMMAND);
 	}
 	public String serializeCommand() {
 		return ("Cycles: " + cycles + "\n" +
@@ -189,19 +156,18 @@ public class Game implements IPrintable{
 	}
 	public String getWinnerMessage() {
 		if(Vampire.Wins()) return "Vampires win!";
-		else if(Vampire.Loose()) return "Player wins";
+		else if(Vampire.Lose()) return "Player wins";
 		return "Nobody wins...";
 	}
 	public boolean somethingInPosition(int r,int c) {
 		return objects.somethingInPosition(r, c);
 	}
-	public void checkAnyWinner() {
-		if (Vampire.getDeadVampires() == getNumVampires())
-			Vampire.setLoose();
-	}
 	public boolean inPlane(int x, int y) {
     	return x >= 0 && x < Rows() && y >= 0 && y < Cols();
     }
+	public void addCoins(int numCoins) {
+		player.addCoins(numCoins);
+	}
 	public void setExit() {
 		Exit = true;
 	}
@@ -213,9 +179,6 @@ public class Game implements IPrintable{
 	}
 	public String getPositionToString(int i, int j) {
 		return objects.getPositionToString(i, j);
-	}
-	public void addCoins(int numCoins) {
-		player.addCoins(numCoins);
 	}
 	public void pushVampires() {
 		objects.pushVampires();
@@ -233,5 +196,45 @@ public class Game implements IPrintable{
 		player.decreaseCoins(cost);
 	}
 	
-	
+	//FUNCIONES PRIVADAS:
+	private void addRandomVampire() {
+		if (remainingVampires() && vampireFrequency()){
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				objects.addObject(new Vampire(randRow, randCol, this));
+		}
+	}
+	private void addRandomDracula() {
+		if (!Dracula.isAlive() && remainingVampires() && vampireFrequency()) {
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				objects.addObject(new Dracula(randRow, randCol, this));
+		}
+	}
+	private void addRandomExplosive() {
+		if (remainingVampires() && vampireFrequency()){
+			int randRow = rand.nextInt(level.getRows());
+			int randCol = level.getCols() - 1;
+			if(!objects.somethingInPosition(randRow, randCol))
+				objects.addObject(new ExplosiveVampire(randRow, randCol, this));
+		}
+	}
+	private int calculateRemaniningVampires() {
+		return level.getNumberOfVampires() - (Vampire.getNumVampires() + Vampire.getDeadVampires());
+	}
+	private void addCycle() {
+		++cycles;
+	}
+	private String stringRemainingVampires() {
+		return Integer.toString(calculateRemaniningVampires());
+	}
+	private String stringVampiresOnBoard() {
+		return Integer.toString(Vampire.getNumVampires());
+	}
+	private void checkVampiresLose() {
+		if (Vampire.getDeadVampires() == getNumVampires())
+			Vampire.setLose();
+	}
 }

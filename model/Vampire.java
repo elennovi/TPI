@@ -5,7 +5,7 @@ public class Vampire extends GameObject{
 	private int moveCycle;
 	private static final int INITCYCLE = 1;
 	private static boolean wins = false;
-	private static boolean loose = false;
+	private static boolean lose = false;
 	private static int numVampires = 0;
 	private static int deadVampires = 0;
 	private static final int HEALTH = 5;
@@ -14,56 +14,41 @@ public class Vampire extends GameObject{
 	
 	public Vampire(int r, int c, Game game) {
 		super(r, c, HEALTH, GENERICLETTER);
-		moveCycle = INITCYCLE;
 		this.game = game;
-		++numVampires;
+		initVampire();
 	} // Es el constructor genérico de vampiro (V[vida])
 	
 	public Vampire(int r, int c, Game game, String letter) { 
 		super(r, c, HEALTH, letter);
-		moveCycle = INITCYCLE;
 		this.game = game;
-		++numVampires;
-	} // Es el constructor que utilizaremos para los tipos de vampiros
-	
+		initVampire();
+	} // Es el constructor que utilizaremos para los tipos de vampiros	
 	public void advance() { 
 		--moveCycle;
-		if (!game.somethingInPosition(getRow(), getCol() - 1) && canAdvanceCycle()) {
+		if (canAdvance()) {
 			decreaseCol(); 
 			moveCycle = INITCYCLE;
 		}
-		if (hasArrived())
-			Vampire.wins = true;
+		vampireWins();
 	}
-	private boolean isGoingToMove() {
-		return moveCycle == 0 || canAdvanceCycle();
-	}
-	private boolean canAdvanceCycle() {
-		return moveCycle < 0;
-	}
-	private boolean hasArrived() {
-		return getCol() == -1;
+	public static void initGameObjectBoard() {
+		setNumVampires();
+		setNumDead();
 	}
 	public static boolean Wins() {
 		return wins;
 	}
-	public static boolean Loose() {
-		return loose;
+	public static boolean Lose() {
+		return lose;
 	}
-	public static void setLoose() {
-		loose = true;
+	public static void setLose() {
+		lose = true;
 	}
 	public static int getNumVampires() {
 		return numVampires;
 	}
 	public static int getDeadVampires() {
 		return deadVampires;
-	}
-	public static void setNumVampires() {
-		numVampires = 0;
-	}
-	public static void setNumDead() {
-		deadVampires = 0;
 	}
 	public void countVampires() {
 		--numVampires;
@@ -79,8 +64,7 @@ public class Vampire extends GameObject{
 	public boolean receiveSlayerAttack(int damage) {
 		if (!isDead()) {
 			decreaseLife(damage);
-			if (isDead())
-				countVampires();
+			deadVampire();
 		}
 		return true;
 	}
@@ -88,13 +72,11 @@ public class Vampire extends GameObject{
 		// si hay algo en esa posición no puede retroceder
 		if (isGoingToMove())
 			++moveCycle;
-		if (!game.somethingInPosition(getRow(), getCol() + 1))
+		if (nothingNextTo())
 			increaseCol();
-		if (!game.inPlane(getRow(), getCol())) { // si no está en el plano
+		if (outOfBounds()) // si no está en el plano
 			setDeadObject(); // lo ponemos la vida a 0 porque no está en el tablero
-		}
-		if (isDead())
-			countVampires();
+		deadVampire();
 		return true;
 	}
 	public boolean receiveLightFlash() {
@@ -103,6 +85,44 @@ public class Vampire extends GameObject{
 		return true;
 	}
 	public String serialize() {
-		return super.commonInfo() + ";" + moveCycle;
+		return super.serialize() + ";" + moveCycle;
+	}
+	
+	// FUNCIONES PRIVADAS:
+	private void initVampire() {
+		moveCycle = INITCYCLE;
+		++numVampires;
+	}
+	private boolean outOfBounds() {
+		return !game.inPlane(getRow(), getCol());
+	}
+	private boolean nothingNextTo() {
+		return !game.somethingInPosition(getRow(), getCol() + 1);
+	}
+	private void deadVampire() {
+		if (isDead())
+			countVampires();
+	}
+	private boolean canAdvance() {
+		return !game.somethingInPosition(getRow(), getCol() - 1) && canAdvanceCycle();
+	}
+	private void vampireWins() {
+		if (hasArrived())
+			Vampire.wins = true;
+	}
+	private boolean isGoingToMove() {
+		return moveCycle == 0 || canAdvanceCycle();
+	}
+	private boolean canAdvanceCycle() {
+		return moveCycle < 0;
+	}
+	private boolean hasArrived() {
+		return getCol() == -1;
+	}
+	private static void setNumVampires() {
+		numVampires = 0;
+	}
+	private static void setNumDead() {
+		deadVampires = 0;
 	}
 }

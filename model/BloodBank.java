@@ -20,7 +20,7 @@ public class BloodBank extends Slayer {
 		game.addCoins((int) (cost * TENPERCENT));
 	}
 	public String serialize() {
-		return super.commonInfo() + ";" + cost;
+		return super.serialize() + ";" + cost;
 	}
 	public String getPositionToString(int i, int j) {
 		return BLOODBANKLETTER + " [" + cost + "]";
