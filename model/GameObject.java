@@ -36,7 +36,7 @@ public abstract class GameObject implements IAttack{
 	public boolean isDead() {
 		return health == 0;
 	}
-	public String getPositionToString(int i, int j) {
+	public String getPositionToString() {
 		return letter + " [" + health + "]";
 	}
 	public String serialize() {

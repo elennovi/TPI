@@ -22,6 +22,10 @@ public class Game implements IPrintable{
 	private static final int COST_LIGHT_COMMAND = 50;
 	private static final int COST_GARLIC_COMMAND = 10;
     private static final String draculaIsAlive = "Dracula is alive";
+    private static final String notEnoughCoins= "Not enough coins";
+    private static final String invalidPositionMsg = "Unvalid position";
+    private static final String noMoreVampiresLeft = "No more remaining vampires left";
+    private static final String draculaIsAlreadyAlive = "Dracula is already on board";
 	
 	public Game(long seed, Level level) {
 		rand = new Random(seed);
@@ -73,20 +77,6 @@ public class Game implements IPrintable{
 		addRandomDracula();
 		addRandomExplosive();
 	}
-	public void addVampire(int row, int col, String type) throws CommandExecuteException {
-		switch(type) {
-		case "d":
-			if (!Dracula.isAlive())
-				objects.addObject(new Dracula(row, col, this));
-			else throw new DraculaIsAliveException();
-			break;
-		case "e":
-			objects.addObject(new ExplosiveVampire(row, col, this));
-			break;
-		default: 
-			objects.addObject(new Vampire(row, col, this));
-		}
-	}
 	public boolean remainingVampires() {
 		return (Vampire.getNumVampires() + Vampire.getDeadVampires() < level.getNumberOfVampires());
 	}
@@ -102,23 +92,42 @@ public class Game implements IPrintable{
 		if (!isFinished()) 
 			addCycle();
 	}
-	public void addVampireCommand(String type, int row, int col) throws CommandExecuteException {
+	public void addVampireCommand(int row, int col) throws CommandExecuteException {
 		if(inPlane(row, col) && !somethingInPosition(row, col)) {
             if(remainingVampires())
-            	addVampire(row, col, type);
-            else throw new NoMoreVampiresException();
+            	objects.addObject(new Vampire(row, col, this));
+            else throw new NoMoreVampiresException("[ERROR]: " + noMoreVampiresLeft);
         }
-        else throw new InvalidPositionException(col, row);
+        else throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);
+	}
+	public void addDraculaCommand(int row, int col) throws CommandExecuteException {
+		if(inPlane(row, col) && !somethingInPosition(row, col)) {
+            if(remainingVampires()) {
+            	if (!Dracula.isAlive())
+    				objects.addObject(new Dracula(row, col, this));
+    			else throw new DraculaIsAliveException("[ERROR]: " + draculaIsAlreadyAlive);
+            }
+            else throw new NoMoreVampiresException("[ERROR]: " + noMoreVampiresLeft);
+        }
+        else throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);
+	}
+	public void addExplosiveCommand(int row, int col) throws CommandExecuteException {
+		if(inPlane(row, col) && !somethingInPosition(row, col)) {
+            if(remainingVampires())
+            	objects.addObject(new ExplosiveVampire(row, col, this));
+            else throw new NoMoreVampiresException("[ERROR]: " + noMoreVampiresLeft);
+        }
+        else throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);
 	}
 	public void addSlayerCommand(int row, int col) throws CommandExecuteException { 
 		if(!inPlane(row, col) || isInLastCol(col) || somethingInPosition(row, col))
-			throw new InvalidPositionException(col, row);
+			throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);
 		else if(haveEnoughMoney(COST_ADD_COMMAND)) {
 				addSlayer(row, col, COST_ADD_COMMAND);
 				update();
 		}
 		else
-			throw new NotEnoughCoinsException("Defender", COST_ADD_COMMAND);
+			throw new NotEnoughCoinsException("[ERROR]: Defender cost is " + COST_LIGHT_COMMAND + ": " + notEnoughCoins);
 	}
 	public void lightFlashCommand() throws CommandExecuteException {
 		if(haveEnoughMoney(COST_LIGHT_COMMAND)) {
@@ -126,7 +135,7 @@ public class Game implements IPrintable{
 			decreasePlayerCoins(COST_LIGHT_COMMAND);
 			update();
 		}
-		else throw new NotEnoughCoinsException("Light Flash", COST_LIGHT_COMMAND);
+		else throw new NotEnoughCoinsException("[ERROR]: Light Flash cost is " + COST_LIGHT_COMMAND + ": " + notEnoughCoins);
 	}
 	public void addBloodBankCommand(int row, int col, int cost) throws CommandExecuteException {
 		if(inPlane(row, col) && !somethingInPosition(row, col) && !isInLastCol(col)) {
@@ -134,9 +143,9 @@ public class Game implements IPrintable{
 				addBloodBank(row, col, cost);
 				update();
 			}
-			else throw new NotEnoughCoinsException("Defender", cost);
+			else throw new NotEnoughCoinsException("[ERROR]: Defender cost is " + cost + ": " + notEnoughCoins);
 		}
-		else throw new InvalidPositionException(col, row);	
+		else throw new InvalidPositionException("[ERROR]: Position (" + col + ", " + row + "): " + invalidPositionMsg);	
 	}
 	public void garlicPushCommand() throws CommandExecuteException {
 		if (haveEnoughMoney(COST_GARLIC_COMMAND)) {
@@ -144,7 +153,7 @@ public class Game implements IPrintable{
 			decreasePlayerCoins(COST_GARLIC_COMMAND);
 			update();
 		}
-		else throw new NotEnoughCoinsException("Garlic Push", COST_GARLIC_COMMAND);
+		else throw new NotEnoughCoinsException("[ERROR]: Garlic Push cost is " + COST_GARLIC_COMMAND + ": " + notEnoughCoins);
 	}
 	public String serializeCommand() {
 		return ("Cycles: " + cycles + "\n" +

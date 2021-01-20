@@ -22,7 +22,7 @@ public class BloodBank extends Slayer {
 	public String serialize() {
 		return super.serialize() + ";" + cost;
 	}
-	public String getPositionToString(int i, int j) {
+	public String getPositionToString() { // no vale para nada
 		return BLOODBANKLETTER + " [" + cost + "]";
 	}
 	public void attack() {}

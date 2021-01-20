@@ -8,10 +8,7 @@ public class GameObjectList {
 		gameObjects = new ArrayList <GameObject>(); 
 	}
 	public boolean isInPosition(int x, int y) {
-		for (GameObject o: gameObjects)
-			if (o.isInPosition(x, y))
-				return true;
-		return false;
+		return getObjectInPosition(x, y) != null;
 	}
 	public void addObject(GameObject object) { 
 		gameObjects.add(object);
@@ -37,8 +34,9 @@ public class GameObjectList {
 		return getObjectInPosition(i, j);
 	}
 	public String getPositionToString(int i, int j) {
-		if (getObjectInPosition(i, j) != null)
-			return getObjectInPosition(i, j).getPositionToString(i, j);
+		GameObject o = getObjectInPosition(i, j);
+		if (o != null)
+			return o.getPositionToString();
 		else return "";
 	}
 	public void pushVampires() {

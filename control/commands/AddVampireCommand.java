@@ -24,7 +24,16 @@ public class AddVampireCommand extends Command {
 
 	public boolean execute(Game game) throws CommandExecuteException {
 		try {
-			game.addVampireCommand(type, row, col);
+			switch(type) {
+			case "d":
+				game.addDraculaCommand(row, col);
+				break;
+			case "e":
+				game.addExplosiveCommand(row, col);
+				break;
+			default: 
+				game.addVampireCommand(row, col);
+			}
 			return true;
 		}
 		catch (DraculaIsAliveException ex) {
